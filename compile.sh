@@ -6,6 +6,7 @@ mkdir -p target
 
 ${RUSTC} --target x86_64-pc-freebsd-elf --crate-type lib src/my.rs -o target/libmy.rlib
 ${RUSTC} --target x86_64-pc-freebsd-elf --crate-type lib ./rust-nightly/src/libcore/lib.rs -o target/libcore.rlib
+${RUSTC} --target x86_64-pc-freebsd-elf --crate-type lib ./rust-nightly/src/liblibc/lib.rs -o target/liblibc.rlib
 ${RUSTC} --target x86_64-pc-freebsd-elf --emit obj -L target src/main.rs -o target/main.o
 
 clang \
