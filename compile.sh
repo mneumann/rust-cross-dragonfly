@@ -1,9 +1,9 @@
 sh install.sh
 
-mkdir target
+mkdir -p target
 
 rustc --target x86_64-pc-freebsd-elf --crate-type lib src/my.rs -o target/libmy.rlib
-rustc --target x86_64-pc-freebsd-elf --emit obj -L . src/main.rs -o target/main.o
+rustc --target x86_64-pc-freebsd-elf --emit obj -L target src/main.rs -o target/main.o
 
 
 clang \
