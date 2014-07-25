@@ -13,11 +13,7 @@ dftree() {
                         fi
                         cd downloads && bunzip2 ${FILE} && cd ..
                 fi
-	        mkdir -p mnt
-        	sudo mount -o loop,ro downloads/${ISO} ./mnt
-        	sudo cp -R ./mnt ./df-tree
-	        sudo umount ./mnt
-        	rmdir mnt
+                7z x -odf-tree downloads/${ISO}
         fi 
 }
 
