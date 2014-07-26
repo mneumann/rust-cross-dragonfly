@@ -1,8 +1,17 @@
+#!/bin/sh
+
 TOP=`pwd`
 
-CC=g++
-LLVM_INCLUDE=$TOP/target/usr/local/llvm34/include
-CFLAGS="-std=c++11 -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I$(LLVM_INCLUDE)"
+CC="g++"
+LLVM_INCLUDE="${TOP}/target/usr/local/llvm34/include"
+CFLAGS="-std=c++11 -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I${LLVM_INCLUDE}"
+
+###
+# "git submodule" does not work on DragonFly as it does not 
+# find perl in /usr/bin/perl. To make it work:
+#
+#     ln -s /usr/local/bin/perl /usr/bin/perl
+##
 
 git clone https://github.com/mneumann/rust.git
 cd rust
@@ -14,7 +23,7 @@ patch -p1 < ../../patch-llvm
 cd ..
 mkdir llvm-build
 cd llvm-build
-../llvm/configure --prefix=$TOP/target
+../llvm/configure --prefix=${TOP}/target
 make
 make install
 
@@ -24,4 +33,4 @@ cd rustllvm
 ${CC} ${CFLAGS} -c PassWrapper.cpp
 ${CC} ${CFLAGS} -c RustWrapper.cpp
 ar rcs rustllvm.a PassWrapper.o RustWrapper.o	
-cp rustllvm.a $TOP/target
+cp rustllvm.a ${TOP}/target
