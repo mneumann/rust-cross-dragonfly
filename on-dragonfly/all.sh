@@ -1,6 +1,7 @@
 #!/bin/sh
 
 TOP=`pwd`
+TARGET=${TOP}/target
 
 CC="g++"
 LLVM_INCLUDE="${TOP}/target/usr/local/llvm34/include"
@@ -23,14 +24,28 @@ patch -p1 < ../../patch-llvm
 cd ..
 mkdir llvm-build
 cd llvm-build
-../llvm/configure --prefix=${TOP}/target
-make
-make install
+../llvm/configure --prefix=${TARGET}
+gmake
+gmake install
 
-cd ..
-cd rustllvm
-
+cd ${TOP}/rust/src/rustllvm
 ${CC} ${CFLAGS} -c PassWrapper.cpp
 ${CC} ${CFLAGS} -c RustWrapper.cpp
 ar rcs rustllvm.a PassWrapper.o RustWrapper.o	
-cp rustllvm.a ${TOP}/target
+cp rustllvm.a ${TARGET}
+
+cd ${TOP}/rust/src
+ln -s libbacktrace include
+cd libbacktrace
+./configure
+make
+cp .libs/libbacktrace.a ${TARGET}
+cd ..
+unlink include
+
+# Or use "pkg ins libuv"
+cd ${TOP}/rust/src/libuv
+sh autogen.sh
+./configure
+make
+cp .libs/libuv.a ${TARGET}
