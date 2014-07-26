@@ -49,15 +49,6 @@ cp lib/libbacktrace.a target/
  
 # rustllvm
 
-#g++ --target=${TARGET} -c -o target/PassWrapper.o \
-#g++ --sysroot=${DF_TREE} --target=${TARGET} -c -o target/PassWrapper.o \
-#  -I${DF_TREE}/usr/include/c++/4.7 \
-#  -I${RUST_SRC2}/src/llvm/include \
-#  ${RUST_SRC}/src/rustllvm/PassWrapper.cpp
-#exit
-#ar rcs target/libuv_support.a target/uv_support.o
-
-
 # green: context_switch
 
 # compile rust libraries
