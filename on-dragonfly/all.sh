@@ -25,7 +25,7 @@ cd ..
 mkdir llvm-build
 cd llvm-build
 ../llvm/configure --prefix=${TARGET}
-gmake
+gmake ENABLE_OPTIMIZED=1
 gmake install
 
 cd ${TOP}/rust/src/rustllvm
