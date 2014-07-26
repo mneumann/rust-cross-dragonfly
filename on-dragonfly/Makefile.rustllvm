@@ -1,0 +1,19 @@
+# On DragonFlyBSD:
+# Copy this file into rust/src/rustllvm
+# Then make -f Makefile.rustllvm
+
+CC=g++
+LLVM_INCLUDE=/usr/local/llvm34/include
+CFLAGS="-std=c++11 -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I$(LLVM_INCLUDE)"
+
+all: rustllvm.a
+
+rustllvm.a: PassWrapper.o RustWrapper.o
+	ar rcs rustllvm.a PassWrapper.o RustWrapper.o	
+
+PassWrapper.o: PassWrapper.cpp rustllvm.h
+	${CC} ${CFLAGS} -c PassWrapper.cpp
+
+RustWrapper.o: RustWrapper.cpp rustllvm.h
+	${CC} ${CFLAGS} -c $RustWrapper.cpp
+
