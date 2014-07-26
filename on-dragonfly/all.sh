@@ -49,3 +49,14 @@ sh autogen.sh
 ./configure
 make
 cp .libs/libuv.a ${TARGET}
+
+# Copy Dragonfly system libraries
+
+for i in m c kvm dl rt pthread ncurses z; do
+  cp /usr/lib/lib${i}.a ${TARGET}
+done
+
+cp /usr/lib/gcc47/*.o ${TARGET}
+for i in gcc gcc_eh gcc_pic ssp stdc++ supc++; do
+  cp /usr/lib/gcc47/lib${i}.a ${TARGET}
+done
