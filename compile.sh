@@ -13,11 +13,11 @@ sh install.sh
 
 mkdir -p target
 
+# XXX: do this on Dragonfly
 llc -filetype=obj -mtriple=x86_64-pc-dragonfly -relocation-model=pic \
   -o target/rust_try.o ${RUST_SRC}/src/rt/rust_try.ll
 # record_sp.S
 ar rcs target/librustrt_native.a target/rust_try.o
-
 
 # Builtin
 ${CC_TARGET} -c -o target/rust_builtin.o -I${RUST_SRC}/src/rt \
@@ -35,7 +35,6 @@ ${CC_TARGET} -c -o target/uv_support.o \
   ${RUST_SRC}/src/rt/rust_uv.c
 
 ar rcs target/libuv_support.a target/uv_support.o
-
 
 ${CC_TARGET} -c -o target/morestack.o \
   -I${RUST_SRC}/src/rt \
