@@ -3,9 +3,11 @@
 TOP=`pwd`
 TARGET=${TOP}/target
 
-CC="g++"
-LLVM_INCLUDE="${TOP}/target/usr/local/llvm34/include"
-CFLAGS="-std=c++11 -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS -I${LLVM_INCLUDE}"
+CC=cc
+CXX="g++"
+LLVM_TARGET="${TOP}/target-llvm"
+
+mkdir -p ${TARGET}
 
 ###
 # "git submodule" does not work on DragonFly as it does not 
@@ -24,15 +26,18 @@ patch -p1 < ../../patch-llvm
 cd ..
 mkdir llvm-build
 cd llvm-build
-../llvm/configure --prefix=${TARGET}
+../llvm/configure --prefix=${LLVM_TARGET}
 gmake ENABLE_OPTIMIZED=1
-gmake install
+gmake ENABLE_OPTIMIZED=1 install
+
+cp `${LLVM_TARGET}/bin/llvm-config --libfiles` ${TARGET}
+#find ${LLVM_TARGET}/lib -name "libLLVM*.a" | xargs -J % cp % ${TARGET}
 
 cd ${TOP}/rust/src/rustllvm
-${CC} ${CFLAGS} -c PassWrapper.cpp
-${CC} ${CFLAGS} -c RustWrapper.cpp
-ar rcs rustllvm.a PassWrapper.o RustWrapper.o	
-cp rustllvm.a ${TARGET}
+${CXX} `${LLVM_TARGET}/bin/llvm-config --cxxflags` -c PassWrapper.cpp
+${CXX} `${LLVM_TARGET}/bin/llvm-config --cxxflags` -c RustWrapper.cpp
+ar rcs librustllvm.a PassWrapper.o RustWrapper.o	
+cp librustllvm.a ${TARGET}
 
 cd ${TOP}/rust/src
 ln -s libbacktrace include
@@ -50,9 +55,41 @@ sh autogen.sh
 make
 cp .libs/libuv.a ${TARGET}
 
+cd ${TOP}/rust/src/rt
+${LLVM_TARGET}/bin/llc rust_try.ll
+${CC} -c -o rust_try.o rust_try.s
+${CC} -c -o record_sp.o arch/x86_64/record_sp.S
+ar rcs ${TARGET}/librustrt_native.a rust_try.o record_sp.o
+
+cd ${TOP}/rust/src/rt
+${CC} -c -o context.o arch/x86_64/_context.S
+ar rcs ${TARGET}/libcontext_switch.a context.o
+
+cd ${TOP}/rust/src/rt
+${CC} -c -o rust_builtin.o rust_builtin.c
+ar rcs ${TARGET}/librust_builtin.a rust_builtin.o 
+
+cd ${TOP}/rust/src/rt
+${CC} -c -o morestack.o arch/x86_64/morestack.S
+ar rcs ${TARGET}/libmorestack.a morestack.o
+
+cd ${TOP}/rust/src/rt
+${CC} -c -o miniz.o miniz.c
+ar rcs ${TARGET}/libminiz.a miniz.o 
+
+cd ${TOP}/rust/src/rt
+${CC} -c -I../libuv/include -o rust_uv.o rust_uv.c
+ar rcs ${TARGET}/libuv_support.a rust_uv.o 
+
+
+
+cd ${TOP}/rust/src/rt/hoedown
+gmake libhoedown.a 
+cp libhoedown.a ${TARGET}
+
 # Copy Dragonfly system libraries
 
-for i in m c kvm dl rt pthread ncurses z; do
+for i in m c kvm dl rt pthread ncurses z edit tinfo; do
   cp /usr/lib/lib${i}.a ${TARGET}
 done
 
@@ -60,3 +97,5 @@ cp /usr/lib/gcc47/*.o ${TARGET}
 for i in gcc gcc_eh gcc_pic ssp stdc++ supc++; do
   cp /usr/lib/gcc47/lib${i}.a ${TARGET}
 done
+
+# FIXME: compiler-rt missing
