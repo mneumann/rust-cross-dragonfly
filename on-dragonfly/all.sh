@@ -20,7 +20,7 @@ echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 #     ln -s /usr/local/bin/perl /usr/bin/perl
 ##
 
-git clone --depth 10 https://github.com/mneumann/rust.git
+git clone https://github.com/mneumann/rust.git
 cd rust
 git checkout dragonfly
 git submodule init
@@ -31,13 +31,11 @@ cd ..
 mkdir llvm-build
 cd llvm-build
 ../llvm/configure --prefix=${LLVM_TARGET}
-# XXX: build release?
 gmake ENABLE_OPTIMIZED=1
 gmake ENABLE_OPTIMIZED=1 install
 
 mkdir -p ${TARGET}/llvm
 cp `${LLVM_TARGET}/bin/llvm-config --libfiles` ${TARGET}/llvm
-#find ${LLVM_TARGET}/lib -name "libLLVM*.a" | xargs -J % cp % ${TARGET}
 
 cd ${TOP}/rust/src/rustllvm
 ${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` PassWrapper.cpp
@@ -94,8 +92,6 @@ cd ${TOP}/rust/src/rt
 ${CC} -c -I../libuv/include -o rust_uv.o rust_uv.c
 ar rcs ${TARGET}/libuv_support.a rust_uv.o 
 
-
-
 cd ${TOP}/rust/src/rt/hoedown
 gmake libhoedown.a 
 cp libhoedown.a ${TARGET}
@@ -106,18 +102,6 @@ mkdir -p ${TARGET}/lib
 mkdir -p ${TARGET}/usr/lib
 cp -r /lib ${TARGET}/lib
 cp -r /usr/lib ${TARGET}/usr/lib
-
-#for i in m c kvm dl rt pthread ncurses z edit tinfo; do
-#  cp /usr/lib/lib${i}.a ${TARGET}
-#done
-
-#cp /usr/lib/gcc47/*.o ${TARGET}
-#for i in gcc gcc_eh gcc_pic ssp stdc++ supc++; do
-#  cp /usr/lib/gcc47/lib${i}.a ${TARGET}
-#done
-
-# FIXME: compiler-rt missing
-#cp ${TOP}/../lib/libcompiler-rt.a ${TARGET}
 
 cd ${TOP}
 tar cvzf target.tgz ${TARGET}
