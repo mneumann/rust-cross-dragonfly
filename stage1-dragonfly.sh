@@ -1,6 +1,15 @@
 #!/bin/sh
 
+if [ `uname -s` != "DragonFly" ]; then
+  echo "You have to run this on DragonFly!"
+  exit 1
+fi
+
+mkdir -p stage1-dragonfly
+cd stage1-dragonfly
+
 TOP=`pwd`
+
 TARGET=${TOP}/target
 
 CC=cc
