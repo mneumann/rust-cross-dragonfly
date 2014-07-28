@@ -14,5 +14,6 @@ cc -o stage3-dragonfly/bin/rustc stage2-linux/driver.o ${RUST_DEPS} -L./stage1-d
 
 cp stage1-dragonfly/libs/libcompiler-rt.a stage3-dragonfly/lib
 cp stage1-dragonfly/libs/libmorestack.a stage3-dragonfly/lib
+cp stage2-linux/rust-libs/*.rlib stage3-dragonfly/lib
 
-./rustc -C link-args="-L./stage3-dragonfly/libs -lc" hw.rs
+./rustc -Lstage3-dragonfly/lib hw.rs
