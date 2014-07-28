@@ -111,3 +111,6 @@ cp -r /usr/lib ${TARGET}/usr/lib
 
 # FIXME: compiler-rt missing
 cp ${TOP}/../lib/libcompiler-rt.a ${TARGET}
+
+cd ${TOP}
+tar cvzf target.tgz ${TARGET}
