@@ -9,6 +9,10 @@ LLVM_TARGET="${TOP}/target-llvm"
 
 mkdir -p ${TARGET}
 
+echo "-- TOP: ${TOP}"
+echo "-- TARGET: ${TARGET}"
+echo "-- LLVM_TARGET: ${LLVM_TARGET}"
+
 ###
 # "git submodule" does not work on DragonFly as it does not 
 # find perl in /usr/bin/perl. To make it work:
@@ -16,7 +20,7 @@ mkdir -p ${TARGET}
 #     ln -s /usr/local/bin/perl /usr/bin/perl
 ##
 
-git clone https://github.com/mneumann/rust.git
+git clone --depth 10 https://github.com/mneumann/rust.git
 cd rust
 git checkout dragonfly
 git submodule init
@@ -27,15 +31,17 @@ cd ..
 mkdir llvm-build
 cd llvm-build
 ../llvm/configure --prefix=${LLVM_TARGET}
+# XXX: build release?
 gmake ENABLE_OPTIMIZED=1
 gmake ENABLE_OPTIMIZED=1 install
 
-cp `${LLVM_TARGET}/bin/llvm-config --libfiles` ${TARGET}
+mkdir -p ${TARGET}/llvm
+cp `${LLVM_TARGET}/bin/llvm-config --libfiles` ${TARGET}/llvm
 #find ${LLVM_TARGET}/lib -name "libLLVM*.a" | xargs -J % cp % ${TARGET}
 
 cd ${TOP}/rust/src/rustllvm
-${CXX} `${LLVM_TARGET}/bin/llvm-config --cxxflags` -c PassWrapper.cpp
-${CXX} `${LLVM_TARGET}/bin/llvm-config --cxxflags` -c RustWrapper.cpp
+${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` PassWrapper.cpp
+${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` RustWrapper.cpp
 ar rcs librustllvm.a PassWrapper.o RustWrapper.o	
 cp librustllvm.a ${TARGET}
 
@@ -89,13 +95,19 @@ cp libhoedown.a ${TARGET}
 
 # Copy Dragonfly system libraries
 
-for i in m c kvm dl rt pthread ncurses z edit tinfo; do
-  cp /usr/lib/lib${i}.a ${TARGET}
-done
+mkdir -p ${TARGET}/lib
+mkdir -p ${TARGET}/usr/lib
+cp -r /lib ${TARGET}/lib
+cp -r /usr/lib ${TARGET}/usr/lib
 
-cp /usr/lib/gcc47/*.o ${TARGET}
-for i in gcc gcc_eh gcc_pic ssp stdc++ supc++; do
-  cp /usr/lib/gcc47/lib${i}.a ${TARGET}
-done
+#for i in m c kvm dl rt pthread ncurses z edit tinfo; do
+#  cp /usr/lib/lib${i}.a ${TARGET}
+#done
+
+#cp /usr/lib/gcc47/*.o ${TARGET}
+#for i in gcc gcc_eh gcc_pic ssp stdc++ supc++; do
+#  cp /usr/lib/gcc47/lib${i}.a ${TARGET}
+#done
 
 # FIXME: compiler-rt missing
+cp ${TOP}/../lib/libcompiler-rt.a ${TARGET}
