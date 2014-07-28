@@ -10,11 +10,12 @@ cd stage1-dragonfly
 
 TOP=`pwd`
 
-TARGET=${TOP}/target
+TARGET_SUB=libs
+TARGET=${TOP}/${TARGET_SUB}
 
 CC=cc
 CXX="g++"
-LLVM_TARGET="${TOP}/target-llvm"
+LLVM_TARGET="${TOP}/llvm-install"
 
 mkdir -p ${TARGET}
 
@@ -112,5 +113,7 @@ mkdir -p ${TARGET}/usr/lib
 cp -r /lib ${TARGET}/lib
 cp -r /usr/lib ${TARGET}/usr/lib
 
-cd ${TOP}
-tar cvzf target.tgz ${TARGET}
+cd ${TOP}/..
+tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB}
+
+echo "Please copy stage1-dragonfly.tgz onto your Linux machine and extract it"
