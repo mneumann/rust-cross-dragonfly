@@ -106,6 +106,12 @@ cd ${TOP}/rust/src/rt/hoedown
 gmake libhoedown.a 
 cp libhoedown.a ${TARGET}
 
+cd ${TOP}/rust/src/jemalloc
+patch -p1 < ../../patch-jemalloc
+./configure
+gmake
+cp lib/libjemalloc.a ${TARGET}
+
 # Copy Dragonfly system libraries
 
 mkdir -p ${TARGET}/lib
@@ -113,7 +119,13 @@ mkdir -p ${TARGET}/usr/lib
 cp -r /lib ${TARGET}/lib
 cp -r /usr/lib ${TARGET}/usr/lib
 
+# 
+cd ${TOP}/..
+python ${TOP}/rust/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mips ipo bitreader bitwriter linker asmparser jit mcjit interpreter instrumentation" true "${LLVM_TARGET}/bin/llvm-config"
+
 cd ${TOP}/..
 tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB}
+
+
 
 echo "Please copy stage1-dragonfly.tgz onto your Linux machine and extract it"
