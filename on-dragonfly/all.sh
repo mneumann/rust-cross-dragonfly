@@ -45,6 +45,13 @@ ${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` RustWrapper.cpp
 ar rcs librustllvm.a PassWrapper.o RustWrapper.o	
 cp librustllvm.a ${TARGET}
 
+# build libcompiler-rt.a
+cd ${TOP}/rust/src/compiler-rt
+cmake -DLLVM_CONFIG_PATH=${LLVM_TARGET}/bin/llvm-config
+make
+cp ./lib/dragonfly/libclang_rt.x86_64.a ${TARGET}/libcompiler-rt.a
+
+
 cd ${TOP}/rust/src
 ln -s libbacktrace include
 cd libbacktrace
@@ -110,7 +117,7 @@ cp -r /usr/lib ${TARGET}/usr/lib
 #done
 
 # FIXME: compiler-rt missing
-cp ${TOP}/../lib/libcompiler-rt.a ${TARGET}
+#cp ${TOP}/../lib/libcompiler-rt.a ${TARGET}
 
 cd ${TOP}
 tar cvzf target.tgz ${TARGET}
