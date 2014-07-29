@@ -1,4 +1,20 @@
 
+if [ `uname -s` != "DragonFly" ]; then
+  echo "You have to run this on DragonFly!"
+  exit 1
+fi
+
+if [ ! -e "stage1-dragonfly/libs" ]; then
+  echo "stage1-dragonfly does not exist!"
+  exit 1
+fi
+
+if [ ! -e "stage2-linux/rust-libs" ]; then
+  echo "stage2-linux does not exist!"
+  exit 1
+fi
+
+
 RL=stage2-linux/rust-libs
 
 SUP_LIBS="-Wl,-whole-archive -lmorestack -Wl,-no-whole-archive -lrust_builtin -lrustllvm -lcompiler-rt -lbacktrace -lcontext_switch -lhoedown -lminiz -lrustrt_native -luv -luv_support"
@@ -10,10 +26,10 @@ RUST_DEPS="$RL/librustc.rlib $RL/libtime.rlib $RL/librustc_llvm.rlib $RL/libaren
 mkdir -p stage3-dragonfly/bin
 mkdir -p stage3-dragonfly/lib
 
-cc -o stage3-dragonfly/bin/rustc stage2-linux/driver.o ${RUST_DEPS} -L./stage1-dragonfly/libs/llvm -L./stage1-dragonfly/libs $SUP_LIBS $LLVM_LIBS -lrt -lpthread -lgcc_eh -lc -lm -lz -ledit -ltinfo -lstdc++ 
+cc -o stage3-dragonfly/bin/rustc stage2-linux/driver.o ${RUST_DEPS} -L./stage1-dragonfly/libs/llvm -L./stage1-dragonfly/libs $SUP_LIBS $LLVM_LIBS -lrt -lpthread -lgcc_pic -lc -lm -lz -ledit -ltinfo -lstdc++ 
 
 cp stage1-dragonfly/libs/libcompiler-rt.a stage3-dragonfly/lib
 cp stage1-dragonfly/libs/libmorestack.a stage3-dragonfly/lib
 cp stage2-linux/rust-libs/*.rlib stage3-dragonfly/lib
 
-./rustc -Lstage3-dragonfly/lib hw.rs
+./stage3-dragonfly/bin/rustc -Lstage3-dragonfly/lib hw.rs && ./hw
