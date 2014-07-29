@@ -108,7 +108,8 @@ cp libhoedown.a ${TARGET}
 
 cd ${TOP}/rust/src/jemalloc
 patch -p1 < ../../patch-jemalloc
-./configure
+./configure --enable-xmalloc --with-jemalloc-prefix=je_
+#--enable-utrace --enable-debug --enable-ivsalloc
 gmake
 cp lib/libjemalloc.a ${TARGET}
 
