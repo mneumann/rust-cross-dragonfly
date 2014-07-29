@@ -40,4 +40,4 @@ ln -s /usr/local/bin/perl /usr/bin/perl
 
 This is because git-submodule uses a hard-coded perl.
 
-[rust-cross]: http://ntecs.de/blog/2014/07/29/rust-ported-to-dragonfly-bsd/
+[rust-cross]: http://ntecs.de/blog/2014/07/29/rust-ported-to-dragonflybsd/
