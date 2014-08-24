@@ -14,22 +14,19 @@ TOP=`pwd`
 if [ ! -e ${TOP}/stage4-dragonfly/rust ]; then
   cd stage4-dragonfly
   if [ -e ${TOP}/stage1-dragonfly/rust ]; then
-    git clone --reference ${TOP}/stage1-dragonfly/rust https://github.com/mneumann/rust.git
+    git clone --reference ${TOP}/stage1-dragonfly/rust https://github.com/rust-lang/rust.git
   else
-    git clone https://github.com/mneumann/rust.git
+    git clone https://github.com/rust-lang/rust.git
   fi
-
-  cd rust
-  git checkout dragonfly
   cd ${TOP}
 fi
 
 cd ${TOP}/stage4-dragonfly/rust
 ./configure --enable-local-rust --local-rust-root=${TOP}/stage3-dragonfly --prefix=/usr/local
 cd src/llvm
-patch -p1 < ../../patch-llvm
+patch -p1 < ${TOP}/patch-llvm
 cd ../jemalloc
-patch -p1 < ../../patch-jemalloc
+patch -p1 < ${TOP}/patch-jemalloc
 cd ../..
 
 gmake

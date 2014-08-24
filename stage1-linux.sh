@@ -10,9 +10,14 @@ cd stage1-linux
 
 TOP=`pwd`
 
-git clone https://github.com/mneumann/rust.git
+git clone https://github.com/rust-lang/rust.git
 cd rust
-git checkout dragonfly
 ./configure --prefix=${TOP}/install
+cd src/llvm
+patch -p1 < ${TOP}/../patch-llvm
+cd ../jemalloc
+patch -p1 < ${TOP}/../patch-jemalloc
+cd ../..
+
 make
 make install

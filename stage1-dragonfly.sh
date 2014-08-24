@@ -30,13 +30,12 @@ echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 #     ln -s /usr/local/bin/perl /usr/bin/perl
 ##
 
-git clone https://github.com/mneumann/rust.git
+git clone https://github.com/rust-lang/rust.git
 cd rust
-git checkout dragonfly
 git submodule init
 git submodule update  
 cd src/llvm
-patch -p1 < ../../patch-llvm
+patch -p1 < ${TOP}/../patch-llvm
 cd ..
 mkdir llvm-build
 cd llvm-build
@@ -107,7 +106,7 @@ gmake libhoedown.a
 cp libhoedown.a ${TARGET}
 
 cd ${TOP}/rust/src/jemalloc
-patch -p1 < ../../patch-jemalloc
+patch -p1 < ${TOP}/../patch-jemalloc
 ./configure --enable-xmalloc --with-jemalloc-prefix=je_
 #--enable-utrace --enable-debug --enable-ivsalloc
 gmake

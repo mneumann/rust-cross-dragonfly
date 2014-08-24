@@ -37,9 +37,7 @@ mkdir -p ${TOP}/stage2-linux/rust-libs
 
 if [ ! -e ${TOP}/stage2-linux/rust ]; then
   cd stage2-linux
-  git clone --reference ${TOP}/stage1-linux/rust https://github.com/mneumann/rust.git
-  cd rust
-  git checkout dragonfly
+  git clone --reference ${TOP}/stage1-linux/rust https://github.com/rust-lang/rust.git
   cd ${TOP}
 fi
 
