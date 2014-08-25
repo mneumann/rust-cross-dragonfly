@@ -124,7 +124,7 @@ cd ${TOP}/..
 python ${TOP}/rust/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mips ipo bitreader bitwriter linker asmparser jit mcjit interpreter instrumentation" true "${LLVM_TARGET}/bin/llvm-config"
 
 cd ${TOP}/..
-tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB}
+tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB} stage1-dragonfly/llvmdeps.rs
 
 
 
