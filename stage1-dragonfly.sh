@@ -33,7 +33,7 @@ echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 git clone https://github.com/rust-lang/rust.git
 cd rust
 git submodule init
-git submodule update  
+git submodule update
 cd src/llvm
 patch -p1 < ${TOP}/../patch-llvm
 cd ..

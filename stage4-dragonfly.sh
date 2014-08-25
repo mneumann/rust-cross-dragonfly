@@ -18,6 +18,9 @@ if [ ! -e ${TOP}/stage4-dragonfly/rust ]; then
   else
     git clone https://github.com/rust-lang/rust.git
   fi
+  cd rust
+  git submodule init
+  git submodule update
   cd ${TOP}
 fi
 
