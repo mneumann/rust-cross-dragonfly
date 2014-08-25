@@ -53,7 +53,7 @@ export CFG_PREFIX="/usr/local"
 
 RUST_FLAGS="--cfg jemalloc"
 
-RUST_LIBS="core libc alloc unicode collections rustrt rand sync std native arena rustuv debug log fmt_macros serialize term syntax flate time url uuid getopts regex test coretest glob graphviz num rustc_back semver rustc_llvm rustc fourcc hexfloat regex_macros green rustdoc"
+RUST_LIBS="core libc alloc unicode collections rustrt rand sync std native arena rustuv debug log fmt_macros serialize term syntax flate time url uuid getopts regex test coretest glob graphviz num rustc_back semver rustc_llvm rbml rustc fourcc hexfloat regex_macros green rustdoc"
 
 # compile rust libraries
 for lib in $RUST_LIBS; do
