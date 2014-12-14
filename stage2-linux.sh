@@ -37,14 +37,12 @@ mkdir -p ${TOP}/stage2-linux/rust-libs
 
 if [ ! -e ${TOP}/stage2-linux/rust ]; then
   cd stage2-linux
-  git clone --reference ${TOP}/stage1-linux/rust https://github.com/rust-lang/rust.git
+  git clone --depth 1 https://github.com/rust-lang/rust.git
   cd ${TOP}
 fi
 
-cp ${TOP}/stage1-dragonfly/llvmdeps.rs ${TOP}/stage2-linux/rust/src/librustc_llvm/
-
 # XXX
-export CFG_VERSION="0.12.0-pre-nightly"
+export CFG_VERSION="0.13.0-pre-nightly"
 export CFG_RELEASE="dragonfly-cross"
 export CFG_VER_HASH="hash"
 export CFG_VER_DATE="`date`"
@@ -53,7 +51,9 @@ export CFG_PREFIX="/usr/local"
 
 RUST_FLAGS="--cfg jemalloc"
 
-RUST_LIBS="core libc alloc unicode collections rustrt rand sync std native arena rustuv debug log fmt_macros serialize term syntax flate time url uuid getopts regex test coretest glob graphviz num rustc_back semver rustc_llvm rbml rustc fourcc hexfloat regex_macros green rustdoc"
+export CFG_LLVM_LINKAGE_FILE=${TOP}/stage1-dragonfly/llvmdeps.rs
+
+RUST_LIBS="core libc alloc unicode collections rustrt rand std arena regex log fmt_macros serialize term syntax flate time getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans regex_macros rustc_driver rustdoc"
 
 # compile rust libraries
 for lib in $RUST_LIBS; do
