@@ -30,7 +30,7 @@ echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 #     ln -s /usr/local/bin/perl /usr/bin/perl
 ##
 
-git clone https://github.com/rust-lang/rust.git
+git clone --depth 1 https://github.com/rust-lang/rust.git
 cd rust
 git submodule init
 git submodule update
@@ -68,12 +68,12 @@ cp .libs/libbacktrace.a ${TARGET}
 cd ..
 unlink include
 
-# Or use "pkg ins libuv"
-cd ${TOP}/rust/src/libuv
-sh autogen.sh
-./configure
-make
-cp .libs/libuv.a ${TARGET}
+## Or use "pkg ins libuv"
+#cd ${TOP}/rust/src/libuv
+#sh autogen.sh
+#./configure
+#make
+#cp .libs/libuv.a ${TARGET}
 
 cd ${TOP}/rust/src/rt
 ${LLVM_TARGET}/bin/llc rust_try.ll
@@ -106,7 +106,7 @@ gmake libhoedown.a
 cp libhoedown.a ${TARGET}
 
 cd ${TOP}/rust/src/jemalloc
-patch -p1 < ${TOP}/../patch-jemalloc
+#patch -p1 < ${TOP}/../patch-jemalloc
 ./configure --enable-xmalloc --with-jemalloc-prefix=je_
 #--enable-utrace --enable-debug --enable-ivsalloc
 gmake
@@ -125,7 +125,5 @@ python ${TOP}/rust/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mip
 
 cd ${TOP}/..
 tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB} stage1-dragonfly/llvmdeps.rs
-
-
 
 echo "Please copy stage1-dragonfly.tgz onto your Linux machine and extract it"
