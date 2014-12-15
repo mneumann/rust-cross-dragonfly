@@ -22,10 +22,11 @@ fi
 
 TOP=`pwd`
 
+TARGET=x86_64-unknown-dragonfly
 RUST_PREFIX=${TOP}/stage1-linux/install
 RUST_SRC=${TOP}/stage2-linux/rust
 RUSTC=${RUST_PREFIX}/bin/rustc
-TARGET=x86_64-unknown-dragonfly
+RUSTC_FLAGS="--target ${TARGET}"
 
 DF_LIB_DIR=${TOP}/stage1-dragonfly/libs
 RS_LIB_DIR=${TOP}/stage2-linux/rust-libs
@@ -61,10 +62,10 @@ for lib in $RUST_LIBS; do
     echo "skipping $lib"
   else
     echo "compiling $lib"
-    ${RUSTC} --target ${TARGET} ${RUST_FLAGS} --crate-type lib -L${DF_LIB_DIR} -L${DF_LIB_DIR}/llvm -L${RS_LIB_DIR} ${RUST_SRC}/src/lib${lib}/lib.rs -o ${RS_LIB_DIR}/lib${lib}.rlib
+    ${RUSTC} ${RUST_FLAGS} --crate-type lib -L${DF_LIB_DIR} -L${DF_LIB_DIR}/llvm -L${RS_LIB_DIR} ${RUST_SRC}/src/lib${lib}/lib.rs -o ${RS_LIB_DIR}/lib${lib}.rlib
   fi
 done
 
-${RUSTC} ${RUST_FLAGS} --emit obj -o ${TOP}/stage2-linux/driver.o --target ${TARGET} -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
+${RUSTC} ${RUST_FLAGS} --emit obj -o ${TOP}/stage2-linux/driver.o -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
 
 tar cvzf ${TOP}/stage2-linux.tgz stage2-linux/*.o stage2-linux/rust-libs
