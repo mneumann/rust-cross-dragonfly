@@ -38,7 +38,7 @@ mkdir -p ${TOP}/stage2-linux/rust-libs
 
 if [ ! -e ${TOP}/stage2-linux/rust ]; then
   cd stage2-linux
-  git clone --depth 1 https://github.com/rust-lang/rust.git
+  git clone --depth 1 --branch dragonfly3 https://github.com/mneumann/rust.git
   cd ${TOP}
 fi
 
@@ -62,10 +62,10 @@ for lib in $RUST_LIBS; do
     echo "skipping $lib"
   else
     echo "compiling $lib"
-    ${RUSTC} ${RUST_FLAGS} --crate-type lib -L${DF_LIB_DIR} -L${DF_LIB_DIR}/llvm -L${RS_LIB_DIR} ${RUST_SRC}/src/lib${lib}/lib.rs -o ${RS_LIB_DIR}/lib${lib}.rlib
+    ${RUSTC} ${RUSTC_FLAGS} --crate-type lib -L${DF_LIB_DIR} -L${DF_LIB_DIR}/llvm -L${RS_LIB_DIR} ${RUST_SRC}/src/lib${lib}/lib.rs -o ${RS_LIB_DIR}/lib${lib}.rlib
   fi
 done
 
-${RUSTC} ${RUST_FLAGS} --emit obj -o ${TOP}/stage2-linux/driver.o -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
+${RUSTC} ${RUSTC_FLAGS} --emit obj -o ${TOP}/stage2-linux/driver.o -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
 
 tar cvzf ${TOP}/stage2-linux.tgz stage2-linux/*.o stage2-linux/rust-libs
