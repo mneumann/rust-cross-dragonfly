@@ -28,6 +28,8 @@ RUST_SRC=${TOP}/stage2-linux/rust
 RUSTC=${RUST_PREFIX}/bin/rustc
 RUSTC_FLAGS="--target ${TARGET}"
 
+BRANCH=dragonfly4
+
 DF_LIB_DIR=${TOP}/stage1-dragonfly/libs
 RS_LIB_DIR=${TOP}/stage2-linux/rust-libs
 
@@ -38,7 +40,7 @@ mkdir -p ${TOP}/stage2-linux/rust-libs
 
 if [ ! -e ${TOP}/stage2-linux/rust ]; then
   cd stage2-linux
-  git clone --depth 1 --branch dragonfly3 https://github.com/mneumann/rust.git
+  git clone --depth 1 --branch ${BRANCH} https://github.com/mneumann/rust.git
   cd ${TOP}
 fi
 
