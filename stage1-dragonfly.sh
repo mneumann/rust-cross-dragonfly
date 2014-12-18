@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. ./config.sh
+
 if [ `uname -s` != "DragonFly" ]; then
   echo "You have to run this on DragonFly!"
   exit 1
@@ -23,6 +25,7 @@ echo "-- TOP: ${TOP}"
 echo "-- TARGET: ${TARGET}"
 echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 
+
 ###
 # "git submodule" does not work on DragonFly as it does not 
 # find perl in /usr/bin/perl. To make it work:
@@ -30,7 +33,7 @@ echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 #     ln -s /usr/local/bin/perl /usr/bin/perl
 ##
 
-git clone --depth 1 https://github.com/rust-lang/rust.git
+git clone --depth 1 --branch ${BRANCH} ${REPO}
 cd rust
 git submodule init
 git submodule update
@@ -68,13 +71,6 @@ cp .libs/libbacktrace.a ${TARGET}
 cd ..
 unlink include
 
-## Or use "pkg ins libuv"
-#cd ${TOP}/rust/src/libuv
-#sh autogen.sh
-#./configure
-#make
-#cp .libs/libuv.a ${TARGET}
-
 cd ${TOP}/rust/src/rt
 ${LLVM_TARGET}/bin/llc rust_try.ll
 ${CC} -c -o rust_try.o rust_try.s
@@ -106,7 +102,6 @@ gmake libhoedown.a
 cp libhoedown.a ${TARGET}
 
 cd ${TOP}/rust/src/jemalloc
-#patch -p1 < ${TOP}/../patch-jemalloc
 ./configure --enable-xmalloc --with-jemalloc-prefix=je_
 #--enable-utrace --enable-debug --enable-ivsalloc
 gmake
