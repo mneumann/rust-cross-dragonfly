@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. ./config.sh
+
 if [ `uname -s` != "Linux" ]; then
   echo "You have to run this on Linux!"
   exit 1
@@ -10,7 +12,7 @@ cd stage1-linux
 
 TOP=`pwd`
 
-git clone --depth 1 https://github.com/rust-lang/rust.git
+git clone --depth 1 --branch ${BRANCH} ${REPO}
 cd rust
 ./configure --prefix=${TOP}/install
 cd src/llvm
