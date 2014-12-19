@@ -18,19 +18,22 @@ TARGET=${TOP}/${TARGET_SUB}
 CC=cc
 CXX="g++"
 LLVM_TARGET="${TOP}/llvm-install"
+WORKDIR="${TOP}/rust-nightly"
 
 mkdir -p ${TARGET}
 
 echo "-- TOP: ${TOP}"
 echo "-- TARGET: ${TARGET}"
 echo "-- LLVM_TARGET: ${LLVM_TARGET}"
+echo "-- WORKDIR: ${WORKDIR}"
 
 
-git clone --depth 1 --branch ${BRANCH} ${REPO}
-cd rust
-git submodule init
-git submodule update
-cd src/llvm
+#git clone --depth 1 --branch ${BRANCH} ${REPO}
+#cd rust
+#git submodule init
+#git submodule update
+get_and_extract_nightly
+cd ${WORKDIR}/src/llvm
 patch -p1 < ${TOP}/../patch-llvm
 cd ..
 mkdir llvm-build
@@ -42,20 +45,20 @@ gmake ENABLE_OPTIMIZED=1 install
 mkdir -p ${TARGET}/llvm
 cp `${LLVM_TARGET}/bin/llvm-config --libfiles` ${TARGET}/llvm
 
-cd ${TOP}/rust/src/rustllvm
+cd ${WORKDIR}/src/rustllvm
 ${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` PassWrapper.cpp
 ${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` RustWrapper.cpp
 ar rcs librustllvm.a PassWrapper.o RustWrapper.o	
 cp librustllvm.a ${TARGET}
 
 # build libcompiler-rt.a
-cd ${TOP}/rust/src/compiler-rt
+cd ${WORKDIR}/src/compiler-rt
 cmake -DLLVM_CONFIG_PATH=${LLVM_TARGET}/bin/llvm-config
 gmake
 cp ./lib/dragonfly/libclang_rt.x86_64.a ${TARGET}/libcompiler-rt.a
 
 
-cd ${TOP}/rust/src
+cd ${WORKDIR}/src
 ln -s libbacktrace include
 cd libbacktrace
 ./configure
@@ -64,33 +67,27 @@ cp .libs/libbacktrace.a ${TARGET}
 cd ..
 unlink include
 
-cd ${TOP}/rust/src/rt
+cd ${WORKDIR}/src/rt
 ${LLVM_TARGET}/bin/llc rust_try.ll
 ${CC} -c -o rust_try.o rust_try.s
 ${CC} -c -o record_sp.o arch/x86_64/record_sp.S
 ar rcs ${TARGET}/librustrt_native.a rust_try.o record_sp.o
 
-cd ${TOP}/rust/src/rt
+cd ${WORKDIR}/src/rt
 ${CC} -c -o context.o arch/x86_64/_context.S
-ar rcs ${TARGET}/libcontext_switch.a context.o
-
-cd ${TOP}/rust/src/rt
 ${CC} -c -o rust_builtin.o rust_builtin.c
-ar rcs ${TARGET}/librust_builtin.a rust_builtin.o 
-
-cd ${TOP}/rust/src/rt
 ${CC} -c -o morestack.o arch/x86_64/morestack.S
-ar rcs ${TARGET}/libmorestack.a morestack.o
-
-cd ${TOP}/rust/src/rt
 ${CC} -c -o miniz.o miniz.c
+ar rcs ${TARGET}/libcontext_switch.a context.o
+ar rcs ${TARGET}/librust_builtin.a rust_builtin.o 
+ar rcs ${TARGET}/libmorestack.a morestack.o
 ar rcs ${TARGET}/libminiz.a miniz.o 
 
-cd ${TOP}/rust/src/rt/hoedown
+cd ${WORKDIR}/src/rt/hoedown
 gmake libhoedown.a 
 cp libhoedown.a ${TARGET}
 
-cd ${TOP}/rust/src/jemalloc
+cd ${WORKDIR}/src/jemalloc
 ./configure --enable-xmalloc --with-jemalloc-prefix=je_
 #--enable-utrace --enable-debug --enable-ivsalloc
 gmake
@@ -105,7 +102,7 @@ cp -r /usr/lib ${TARGET}/usr/lib
 
 # 
 cd ${TOP}/..
-python ${TOP}/rust/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mips ipo bitreader bitwriter linker asmparser mcjit interpreter instrumentation" true "${LLVM_TARGET}/bin/llvm-config"
+python ${WORKDIR}/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mips ipo bitreader bitwriter linker asmparser mcjit interpreter instrumentation" true "${LLVM_TARGET}/bin/llvm-config"
 
 cd ${TOP}/..
 tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB} stage1-dragonfly/llvmdeps.rs
