@@ -26,13 +26,6 @@ echo "-- TARGET: ${TARGET}"
 echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 
 
-###
-# "git submodule" does not work on DragonFly as it does not 
-# find perl in /usr/bin/perl. To make it work:
-#
-#     ln -s /usr/local/bin/perl /usr/bin/perl
-##
-
 git clone --depth 1 --branch ${BRANCH} ${REPO}
 cd rust
 git submodule init
@@ -58,7 +51,7 @@ cp librustllvm.a ${TARGET}
 # build libcompiler-rt.a
 cd ${TOP}/rust/src/compiler-rt
 cmake -DLLVM_CONFIG_PATH=${LLVM_TARGET}/bin/llvm-config
-make
+gmake
 cp ./lib/dragonfly/libclang_rt.x86_64.a ${TARGET}/libcompiler-rt.a
 
 
@@ -66,7 +59,7 @@ cd ${TOP}/rust/src
 ln -s libbacktrace include
 cd libbacktrace
 ./configure
-make
+gmake
 cp .libs/libbacktrace.a ${TARGET}
 cd ..
 unlink include
@@ -93,9 +86,9 @@ cd ${TOP}/rust/src/rt
 ${CC} -c -o miniz.o miniz.c
 ar rcs ${TARGET}/libminiz.a miniz.o 
 
-cd ${TOP}/rust/src/rt
-${CC} -c -I../libuv/include -o rust_uv.o rust_uv.c
-ar rcs ${TARGET}/libuv_support.a rust_uv.o 
+#cd ${TOP}/rust/src/rt
+#${CC} -c -I../libuv/include -o rust_uv.o rust_uv.c
+#ar rcs ${TARGET}/libuv_support.a rust_uv.o 
 
 cd ${TOP}/rust/src/rt/hoedown
 gmake libhoedown.a 
