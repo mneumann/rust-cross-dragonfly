@@ -1,3 +1,7 @@
+#!/bin/sh
+
+. ./config.sh
+
 if [ `uname -s` != "DragonFly" ]; then
   echo "You have to run this on DragonFly!"
   exit 1
@@ -6,7 +10,6 @@ fi
 TOP=`pwd`
 LOCAL_RUST_ROOT=${TOP}/stage3-dragonfly
 PREFIX=/usr/local
-BRANCH=dragonfly4
 DST_DIR=${TOP}/stage4-dragonfly
 
 if [ ! -e "${LOCAL_RUST_ROOT}/bin/rustc" ]; then
@@ -18,7 +21,7 @@ mkdir -p ${DST_DIR}
 
 if [ ! -e ${DST_DIR}/rust ]; then
   cd ${DST_DIR}
-  git clone --depth 1 --branch ${BRANCH} https://github.com/mneumann/rust.git
+  git clone --depth 1 --branch ${BRANCH} ${REPO}
   cd rust
   git submodule init
   git submodule update
