@@ -56,7 +56,7 @@ RUST_FLAGS="--cfg jemalloc"
 
 export CFG_LLVM_LINKAGE_FILE=${TOP}/stage1-dragonfly/llvmdeps.rs
 
-RUST_LIBS="core libc alloc unicode collections rustrt rand std arena regex log fmt_macros serialize term syntax flate time getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans regex_macros rustc_driver rustdoc"
+RUST_LIBS="core libc alloc unicode collections rand std arena regex log fmt_macros serialize term syntax flate time getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans regex_macros rustc_driver rustdoc"
 
 # compile rust libraries
 for lib in $RUST_LIBS; do
