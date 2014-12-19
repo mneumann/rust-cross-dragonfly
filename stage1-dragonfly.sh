@@ -86,10 +86,6 @@ cd ${TOP}/rust/src/rt
 ${CC} -c -o miniz.o miniz.c
 ar rcs ${TARGET}/libminiz.a miniz.o 
 
-#cd ${TOP}/rust/src/rt
-#${CC} -c -I../libuv/include -o rust_uv.o rust_uv.c
-#ar rcs ${TARGET}/libuv_support.a rust_uv.o 
-
 cd ${TOP}/rust/src/rt/hoedown
 gmake libhoedown.a 
 cp libhoedown.a ${TARGET}
