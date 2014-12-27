@@ -42,6 +42,7 @@ if [ ! -e ${RUST_SRC} ]; then
   cd stage2-linux
   #git clone --depth 1 --branch ${BRANCH} ${REPO}
   get_and_extract_nightly
+  patch_source
   cd ${TOP}
 fi
 

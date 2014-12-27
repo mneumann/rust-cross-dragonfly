@@ -1,3 +1,6 @@
+#!/bin/sh
+
+. ./config.sh
 
 if [ `uname -s` != "DragonFly" ]; then
   echo "You have to run this on DragonFly!"
@@ -30,7 +33,7 @@ DST_LIB=${DST_DIR}/lib/rustlib/${TARGET}/lib
 mkdir -p ${DST_DIR}/bin
 mkdir -p ${DST_LIB}
 
-cc -fPIC -m64 -o ${DST_DIR}/bin/rustc stage2-linux/driver.o ${RUST_DEPS} -L./stage1-dragonfly/libs/llvm -L./stage1-dragonfly/libs $SUP_LIBS $LLVM_LIBS -lrt -lpthread -lgcc_pic -lc -lm -lz -ledit -ltinfo -lstdc++
+${CC} ${CFLAGS} -o ${DST_DIR}/bin/rustc stage2-linux/driver.o ${RUST_DEPS} -L./stage1-dragonfly/libs/llvm -L./stage1-dragonfly/libs $SUP_LIBS $LLVM_LIBS -lrt -lpthread -lgcc_pic -lc -lm -lz -ledit -ltinfo -lstdc++
 
 echo "rustc done"
 

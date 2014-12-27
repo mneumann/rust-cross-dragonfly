@@ -1,0 +1,16 @@
+diff --git a/src/libstd/sys/unix/thread_local.rs b/src/libstd/sys/unix/thread_local.rs
+index b300e93..ffd588c 100644
+--- a/src/libstd/sys/unix/thread_local.rs
++++ b/src/libstd/sys/unix/thread_local.rs
+@@ -40,7 +40,10 @@ pub unsafe fn destroy(key: Key) {
+ #[cfg(target_os = "macos")]
+ type pthread_key_t = ::libc::c_ulong;
+ 
+-#[cfg(not(target_os = "macos"))]
++#[cfg(target_os = "dragonfly")]
++type pthread_key_t = ::libc::c_int;
++
++#[cfg(all(not(target_os = "macos"), not(target_os = "dragonfly"))]
+ type pthread_key_t = ::libc::c_uint;
+ 
+ extern {
