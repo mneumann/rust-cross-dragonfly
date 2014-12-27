@@ -12,8 +12,9 @@ cd stage1-linux
 
 TOP=`pwd`
 
-git clone --depth 1 --branch ${BRANCH} ${REPO}
-cd rust
+get_and_extract_nightly
+#git clone --depth 1 --branch ${BRANCH} ${REPO}
+cd rust-nightly
 ./configure --prefix=${TOP}/install
 cd src/llvm
 patch -p1 < ${TOP}/../patch-llvm
