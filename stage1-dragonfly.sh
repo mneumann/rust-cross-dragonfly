@@ -74,11 +74,11 @@ ${CC} -c -o record_sp.o arch/x86_64/record_sp.S
 ar rcs ${TARGET}/librustrt_native.a rust_try.o record_sp.o
 
 cd ${WORKDIR}/src/rt
-${CC} -c -o context.o arch/x86_64/_context.S
+#${CC} -c -o context.o arch/x86_64/_context.S
 ${CC} -c -o rust_builtin.o rust_builtin.c
 ${CC} -c -o morestack.o arch/x86_64/morestack.S
 ${CC} -c -o miniz.o miniz.c
-ar rcs ${TARGET}/libcontext_switch.a context.o
+#ar rcs ${TARGET}/libcontext_switch.a context.o
 ar rcs ${TARGET}/librust_builtin.a rust_builtin.o 
 ar rcs ${TARGET}/libmorestack.a morestack.o
 ar rcs ${TARGET}/libminiz.a miniz.o 
