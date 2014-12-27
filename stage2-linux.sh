@@ -26,7 +26,7 @@ TOP=`pwd`
 
 TARGET=x86_64-unknown-dragonfly
 RUST_PREFIX=${TOP}/stage1-linux/install
-RUST_SRC=${TOP}/stage2-linux/rust
+RUST_SRC=${TOP}/stage2-linux/rust-nightly
 RUSTC=${RUST_PREFIX}/bin/rustc
 RUSTC_FLAGS="--target ${TARGET}"
 
@@ -38,9 +38,10 @@ export LD_LIBRARY_PATH=${RUST_PREFIX}/lib
 mkdir -p ${TOP}/stage2-linux
 mkdir -p ${TOP}/stage2-linux/rust-libs
 
-if [ ! -e ${TOP}/stage2-linux/rust ]; then
+if [ ! -e ${RUST_SRC} ]; then
   cd stage2-linux
-  git clone --depth 1 --branch ${BRANCH} ${REPO}
+  #git clone --depth 1 --branch ${BRANCH} ${REPO}
+  get_and_extract_nightly
   cd ${TOP}
 fi
 
@@ -56,7 +57,7 @@ RUST_FLAGS="--cfg jemalloc"
 
 export CFG_LLVM_LINKAGE_FILE=${TOP}/stage1-dragonfly/llvmdeps.rs
 
-RUST_LIBS="core libc alloc unicode collections rand std arena regex log fmt_macros serialize term syntax flate time getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans regex_macros rustc_driver rustdoc"
+RUST_LIBS="core libc alloc unicode collections rand std arena regex log fmt_macros serialize term syntax flate time getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans regex_macros rustc_resolve rustc_driver rustdoc"
 
 # compile rust libraries
 for lib in $RUST_LIBS; do
@@ -71,3 +72,5 @@ done
 ${RUSTC} ${RUSTC_FLAGS} --emit obj -o ${TOP}/stage2-linux/driver.o -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
 
 tar cvzf ${TOP}/stage2-linux.tgz stage2-linux/*.o stage2-linux/rust-libs
+
+echo "Please copy stage2-linux.tgz onto your DragonFly machine and extract it"
