@@ -35,16 +35,16 @@ patch -p1 < ${TOP}/../patch-llvm
 cd ..
 mkdir llvm-build
 cd llvm-build
-../llvm/configure --prefix=${LLVM_TARGET}
-gmake ENABLE_OPTIMIZED=1
-gmake ENABLE_OPTIMIZED=1 install
+../llvm/configure --prefix=${LLVM_TARGET} --enable-pic --enable-targets=x86_64 --enable-optimized
+gmake
+gmake install
 
 mkdir -p ${TARGET}/llvm
 cp `${LLVM_TARGET}/bin/llvm-config --libfiles` ${TARGET}/llvm
 
 cd ${WORKDIR}/src/rustllvm
-${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` PassWrapper.cpp
-${CXX} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` RustWrapper.cpp
+${CXX} ${CFLAGS} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` PassWrapper.cpp
+${CXX} ${CFLAGS} -c `${LLVM_TARGET}/bin/llvm-config --cxxflags` RustWrapper.cpp
 ar rcs librustllvm.a PassWrapper.o RustWrapper.o	
 cp librustllvm.a ${TARGET}
 
@@ -58,7 +58,7 @@ cp ./lib/dragonfly/libclang_rt.x86_64.a ${TARGET}/libcompiler-rt.a
 cd ${WORKDIR}/src
 ln -s libbacktrace include
 cd libbacktrace
-./configure
+./configure --with-pic
 gmake
 cp .libs/libbacktrace.a ${TARGET}
 cd ..
@@ -85,7 +85,7 @@ gmake libhoedown.a
 cp libhoedown.a ${TARGET}
 
 cd ${WORKDIR}/src/jemalloc
-./configure --enable-xmalloc --with-jemalloc-prefix=je_
+./configure --enable-xmalloc --with-jemalloc-prefix=je_ CFLAGS="${CFLAGS}"
 #--enable-utrace --enable-debug --enable-ivsalloc
 gmake
 cp lib/libjemalloc.a ${TARGET}
