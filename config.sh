@@ -5,6 +5,11 @@ CC=cc
 CFLAGS="-m64 -fPIC"
 CXX="g++"
 
+# List of all crates to compile (order is important)
+RUST_CRATES="core libc alloc unicode collections rand std arena regex log fmt_macros serialize term syntax flate"
+RUST_CRATES="${RUST_CRATES} time getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck"
+RUST_CRATES="${RUST_CRATES} rustc_typeck rustc_trans regex_macros rustc_resolve rustc_driver rustdoc"
+
 if [ `uname -s` = "DragonFly" ]; then
   FETCH="fetch --no-verify-peer"
 else
