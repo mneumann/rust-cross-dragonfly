@@ -35,7 +35,7 @@ patch -p1 < ${TOP}/../patch-llvm
 cd ..
 mkdir llvm-build
 cd llvm-build
-../llvm/configure --prefix=${LLVM_TARGET} --enable-pic --enable-targets=x86_64 --enable-optimized
+../llvm/configure --prefix=${LLVM_TARGET} --enable-pic --enable-optimized
 gmake
 gmake install
 
