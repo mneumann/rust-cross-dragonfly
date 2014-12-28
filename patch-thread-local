@@ -10,7 +10,7 @@ index b300e93..ffd588c 100644
 +#[cfg(target_os = "dragonfly")]
 +type pthread_key_t = ::libc::c_int;
 +
-+#[cfg(all(not(target_os = "macos"), not(target_os = "dragonfly"))]
++#[cfg(all(not(target_os = "macos"), not(target_os = "dragonfly")))]
  type pthread_key_t = ::libc::c_uint;
  
  extern {
