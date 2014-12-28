@@ -65,8 +65,8 @@ cd ..
 unlink include
 
 cd ${WORKDIR}/src/rt
-${LLVM_TARGET}/bin/llc rust_try.ll
-${CC} ${CFLAGS} -c -o rust_try.o rust_try.s
+${LLVM_TARGET}/bin/llc -enable-pie -relocation-model=pic -filetype=obj -o rust_try.o rust_try.ll
+#${CC} ${CFLAGS} -c -o rust_try.o rust_try.s
 ${CC} ${CFLAGS} -c -o record_sp.o arch/x86_64/record_sp.S
 ar rcs ${TARGET}/librustrt_native.a rust_try.o record_sp.o
 
