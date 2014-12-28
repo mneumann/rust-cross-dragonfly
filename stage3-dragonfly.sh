@@ -44,4 +44,4 @@ cp stage1-dragonfly/libs/libcompiler-rt.a ${DST_LIB}
 cp stage1-dragonfly/libs/libmorestack.a ${DST_LIB}
 cp stage2-linux/rust-libs/*.rlib ${DST_LIB}
 
-#./${DST_DIR}/bin/rustc -L${DST_LIB} hw.rs && ./hw
+./${DST_DIR}/bin/rustc -L${DST_LIB} hw.rs && ./hw
