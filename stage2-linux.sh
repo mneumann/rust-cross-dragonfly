@@ -2,10 +2,7 @@
 
 . ./config.sh
 
-if [ `uname -s` != "Linux" ]; then
-  echo "You have to run this on Linux!"
-  exit 1
-fi
+assert_linux
 
 if [ ! -e "stage1-linux" ]; then
   echo "stage1-linux does not exist!"

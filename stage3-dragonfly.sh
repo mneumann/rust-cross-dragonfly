@@ -2,10 +2,7 @@
 
 . ./config.sh
 
-if [ `uname -s` != "DragonFly" ]; then
-  echo "You have to run this on DragonFly!"
-  exit 1
-fi
+assert_dragonfly
 
 if [ ! -e "stage1-dragonfly/libs" ]; then
   echo "stage1-dragonfly does not exist!"
@@ -16,7 +13,6 @@ if [ ! -e "stage2-linux/rust-libs" ]; then
   echo "stage2-linux does not exist!"
   exit 1
 fi
-
 
 RL=stage2-linux/rust-libs
 

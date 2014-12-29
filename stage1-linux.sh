@@ -2,10 +2,7 @@
 
 . ./config.sh
 
-if [ `uname -s` != "Linux" ]; then
-  echo "You have to run this on Linux!"
-  exit 1
-fi
+assert_linux
 
 mkdir -p stage1-linux
 cd stage1-linux

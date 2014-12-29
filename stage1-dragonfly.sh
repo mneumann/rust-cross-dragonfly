@@ -2,10 +2,7 @@
 
 . ./config.sh
 
-if [ `uname -s` != "DragonFly" ]; then
-  echo "You have to run this on DragonFly!"
-  exit 1
-fi
+assert_dragonfly
 
 mkdir -p stage1-dragonfly
 cd stage1-dragonfly
