@@ -4,11 +4,6 @@
 
 assert_linux
 
-if [ ! -e "stage1-linux" ]; then
-  echo "stage1-linux does not exist!"
-  exit 1
-fi
-
 if [ ! -e "stage1-linux/install" ]; then
   echo "stage1-linux/install does not exist!"
   exit 1
@@ -20,27 +15,28 @@ if [ ! -e "stage1-dragonfly/libs" ]; then
 fi
 
 TOP=`pwd`
+ROOT=${TOP}/stage2-linux
+
+RUST_PREFIX=${TOP}/stage1-linux/install
+RUSTC=${RUST_PREFIX}/bin/rustc
+
+RUST_SRC=${ROOT}/rust-nightly
 
 TARGET=x86_64-unknown-dragonfly
-RUST_PREFIX=${TOP}/stage1-linux/install
-RUST_SRC=${TOP}/stage2-linux/rust-nightly
-RUSTC=${RUST_PREFIX}/bin/rustc
 RUSTC_FLAGS="--target ${TARGET}"
 
 DF_LIB_DIR=${TOP}/stage1-dragonfly/libs
-RS_LIB_DIR=${TOP}/stage2-linux/rust-libs
+RS_LIB_DIR=${ROOT}/rust-libs
 
 export LD_LIBRARY_PATH=${RUST_PREFIX}/lib
 
-mkdir -p ${TOP}/stage2-linux
-mkdir -p ${TOP}/stage2-linux/rust-libs
+mkdir -p ${ROOT}
+mkdir -p ${RS_LIB_DIR}
 
 if [ ! -e ${RUST_SRC} ]; then
-  cd stage2-linux
-  #git clone --depth 1 --branch ${BRANCH} ${REPO}
+  cd ${ROOT}
   get_and_extract_nightly
   patch_source
-  cd ${TOP}
 fi
 
 # XXX
@@ -65,8 +61,9 @@ for lib in $RUST_CRATES; do
   fi
 done
 
-${RUSTC} ${RUSTC_FLAGS} --emit obj -o ${TOP}/stage2-linux/driver.o -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
+${RUSTC} ${RUSTC_FLAGS} --emit obj -o ${ROOT}/driver.o -L${DF_LIB_DIR} -L${RS_LIB_DIR} --cfg rustc ${RUST_SRC}/src/driver/driver.rs
 
-tar cvzf ${TOP}/stage2-linux.tgz stage2-linux/*.o stage2-linux/rust-libs
+cd ${TOP}
+tar cvzf ${TOP}/stage2-linux.tgz stage2-linux/driver.o stage2-linux/rust-libs
 
 echo "Please copy stage2-linux.tgz onto your DragonFly machine and extract it"

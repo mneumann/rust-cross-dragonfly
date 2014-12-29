@@ -4,32 +4,29 @@
 
 assert_dragonfly
 
-mkdir -p stage1-dragonfly
-cd stage1-dragonfly
-
 TOP=`pwd`
 
-TARGET_SUB=libs
-TARGET=${TOP}/${TARGET_SUB}
-LLVM_TARGET="${TOP}/llvm-install"
-WORKDIR="${TOP}/rust-nightly"
+ROOT=${TOP}/stage1-dragonfly
 
+TARGET_SUB=libs
+TARGET=${ROOT}/${TARGET_SUB}
+LLVM_TARGET="${ROOT}/llvm-install"
+WORKDIR="${ROOT}/rust-nightly"
+
+mkdir -p ${ROOT}
 mkdir -p ${TARGET}
 
-echo "-- TOP: ${TOP}"
+echo "-- ROOT: ${ROOT}"
 echo "-- TARGET: ${TARGET}"
 echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 echo "-- WORKDIR: ${WORKDIR}"
 
-
-#git clone --depth 1 --branch ${BRANCH} ${REPO}
-#cd rust
-#git submodule init
-#git submodule update
+cd ${ROOT}
 get_and_extract_nightly
+
 cd ${WORKDIR}/src/llvm
-patch -p1 < ${TOP}/../patch-llvm
-cd ..
+patch -p1 < ${TOP}/patch-llvm
+cd ${WORKDIR}/src
 mkdir llvm-build
 cd llvm-build
 ../llvm/configure --prefix=${LLVM_TARGET} --enable-pic --enable-optimized
@@ -63,16 +60,13 @@ unlink include
 
 cd ${WORKDIR}/src/rt
 ${LLVM_TARGET}/bin/llc -enable-pie -relocation-model=pic -filetype=obj -o rust_try.o rust_try.ll
-#${CC} ${CFLAGS} -c -o rust_try.o rust_try.s
 ${CC} ${CFLAGS} -c -o record_sp.o arch/x86_64/record_sp.S
 ar rcs ${TARGET}/librustrt_native.a rust_try.o record_sp.o
 
 cd ${WORKDIR}/src/rt
-#${CC} ${CFLAGS} -c -o context.o arch/x86_64/_context.S
 ${CC} ${CFLAGS} -c -o rust_builtin.o rust_builtin.c
 ${CC} ${CFLAGS} -c -o morestack.o arch/x86_64/morestack.S
 ${CC} ${CFLAGS} -c -o miniz.o miniz.c
-#ar rcs ${TARGET}/libcontext_switch.a context.o
 ar rcs ${TARGET}/librust_builtin.a rust_builtin.o 
 ar rcs ${TARGET}/libmorestack.a morestack.o
 ar rcs ${TARGET}/libminiz.a miniz.o 
@@ -95,10 +89,10 @@ cp -r /lib ${TARGET}/lib
 cp -r /usr/lib ${TARGET}/usr/lib
 
 # 
-cd ${TOP}/..
+cd ${TOP}
 python ${WORKDIR}/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mips ipo bitreader bitwriter linker asmparser mcjit interpreter instrumentation" true "${LLVM_TARGET}/bin/llvm-config"
 
-cd ${TOP}/..
+cd ${TOP}
 tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB} stage1-dragonfly/llvmdeps.rs
 
 echo "Please copy stage1-dragonfly.tgz onto your Linux machine and extract it"
