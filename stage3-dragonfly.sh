@@ -9,6 +9,12 @@ if [ ! -e "stage1-dragonfly/libs" ]; then
   exit 1
 fi
 
+if [ ! -e "stage2-linux" ]; then
+  if [ -e "stage2-linux.tgz" ]; then
+    tar xvzf stage2-linux.tgz
+  fi
+fi
+
 if [ ! -e "stage2-linux/rust-libs" ]; then
   echo "stage2-linux does not exist!"
   exit 1
