@@ -1,5 +1,6 @@
-BRANCH=dragonfly-fixes2
-REPO=https://github.com/mneumann/rust.git
+BRANCH=master
+REPO=https://github.com/rust-lang/rust.git
+USE_GIT=YES
 
 CC=cc
 CFLAGS="-m64 -fPIC"
@@ -31,10 +32,14 @@ else
 fi
 
 extract_source_into() {
-  ${FETCH} https://static.rust-lang.org/dist/rust-nightly.tar.gz
-  tar xvzf rust-nightly.tar.gz
-  if [ "$1" != "rust-nightly" ]; then
-    mv rust-nightly $1
+  if [ "${USE_GIT}" = "YES" ]; then
+    git clone --depth 1 --branch ${BRANCH} --recursive ${REPO} $1
+  else
+    ${FETCH} https://static.rust-lang.org/dist/rust-nightly.tar.gz
+    tar xvzf rust-nightly.tar.gz
+    if [ "$1" != "rust-nightly" ]; then
+      mv rust-nightly $1
+    fi
   fi
 }
 
