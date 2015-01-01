@@ -4,40 +4,50 @@
 
 assert_linux
 
-if [ ! -e "stage1-linux/install" ]; then
-  echo "stage1-linux/install does not exist!"
-  exit 1
-fi
+TOP=`pwd`
+
+ROOT=${TOP}/stage2-linux
+RUST_SRC=${ROOT}/rust
+RUST_PREFIX=${ROOT}/install
+RUSTC=${RUST_PREFIX}/bin/rustc
 
 if [ ! -e "stage1-dragonfly/libs" ]; then
   echo "need stage1-dragonfly/libs!"
   exit 1
 fi
 
-TOP=`pwd`
-ROOT=${TOP}/stage2-linux
-
-RUST_PREFIX=${TOP}/stage1-linux/install
-RUSTC=${RUST_PREFIX}/bin/rustc
-
-RUST_SRC=${ROOT}/rust
-
-TARGET=x86_64-unknown-dragonfly
-RUSTC_FLAGS="--target ${TARGET}"
-
-DF_LIB_DIR=${TOP}/stage1-dragonfly/libs
-RS_LIB_DIR=${ROOT}/rust-libs
-
-export LD_LIBRARY_PATH=${RUST_PREFIX}/lib
-
 mkdir -p ${ROOT}
-mkdir -p ${RS_LIB_DIR}
 
 if [ ! -e ${RUST_SRC} ]; then
   cd ${ROOT}
   extract_source_into rust
   patch_source
 fi
+
+if [ ! -e "${RUSTC}" ]; then
+  echo "${RUSTC} does not exist! Generating..."
+
+  cd ${ROOT}
+  extract_source_into rust
+  cd rust
+  ./configure --prefix=${ROOT}/install --disable-docs
+  cd src/llvm
+  patch -p1 < ${TOP}/patch-llvm
+  cd ../..
+
+  make || exit 1
+  make install || exit 1
+fi
+
+TARGET=x86_64-unknown-dragonfly
+RUSTC_FLAGS="--target ${TARGET}"
+DF_LIB_DIR=${TOP}/stage1-dragonfly/libs
+RS_LIB_DIR=${ROOT}/rust-libs
+
+export LD_LIBRARY_PATH=${RUST_PREFIX}/lib
+
+mkdir -p ${RS_LIB_DIR}
+
 
 # XXX
 export CFG_VERSION="0.13.0-pre-nightly"
