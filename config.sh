@@ -30,9 +30,12 @@ else
   FETCH=wget
 fi
 
-get_and_extract_nightly() {
+extract_source_into() {
   ${FETCH} https://static.rust-lang.org/dist/rust-nightly.tar.gz
   tar xvzf rust-nightly.tar.gz
+  if [ "$1" != "rust-nightly" ]; then
+    mv rust-nightly $1
+  fi
 }
 
 patch_source() {

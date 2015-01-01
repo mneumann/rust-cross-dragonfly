@@ -11,7 +11,7 @@ ROOT=${TOP}/stage1-dragonfly
 TARGET_SUB=libs
 TARGET=${ROOT}/${TARGET_SUB}
 LLVM_TARGET="${ROOT}/llvm-install"
-WORKDIR="${ROOT}/rust-nightly"
+WORKDIR="${ROOT}/rust"
 
 mkdir -p ${ROOT}
 mkdir -p ${TARGET}
@@ -22,7 +22,7 @@ echo "-- LLVM_TARGET: ${LLVM_TARGET}"
 echo "-- WORKDIR: ${WORKDIR}"
 
 cd ${ROOT}
-get_and_extract_nightly
+extract_source_into rust
 
 cd ${WORKDIR}/src/llvm
 patch -p1 < ${TOP}/patch-llvm

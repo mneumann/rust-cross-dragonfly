@@ -11,8 +11,8 @@ ROOT=${TOP}/stage1-linux
 mkdir -p ${ROOT}
 
 cd ${ROOT}
-get_and_extract_nightly
-cd rust-nightly
+extract_source_into rust
+cd rust
 ./configure --prefix=${ROOT}/install
 cd src/llvm
 patch -p1 < ${TOP}/patch-llvm

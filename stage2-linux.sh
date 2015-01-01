@@ -20,7 +20,7 @@ ROOT=${TOP}/stage2-linux
 RUST_PREFIX=${TOP}/stage1-linux/install
 RUSTC=${RUST_PREFIX}/bin/rustc
 
-RUST_SRC=${ROOT}/rust-nightly
+RUST_SRC=${ROOT}/rust
 
 TARGET=x86_64-unknown-dragonfly
 RUSTC_FLAGS="--target ${TARGET}"
@@ -35,7 +35,7 @@ mkdir -p ${RS_LIB_DIR}
 
 if [ ! -e ${RUST_SRC} ]; then
   cd ${ROOT}
-  get_and_extract_nightly
+  extract_source_into rust
   patch_source
 fi
 
