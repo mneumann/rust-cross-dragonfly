@@ -13,7 +13,7 @@ mkdir -p ${ROOT}
 cd ${ROOT}
 extract_source_into rust
 cd rust
-./configure --prefix=${ROOT}/install
+./configure --prefix=${ROOT}/install --disable-docs
 cd src/llvm
 patch -p1 < ${TOP}/patch-llvm
 cd ../..
