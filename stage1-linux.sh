@@ -2,22 +2,20 @@
 
 . ./config.sh
 
-if [ `uname -s` != "Linux" ]; then
-  echo "You have to run this on Linux!"
-  exit 1
-fi
-
-mkdir -p stage1-linux
-cd stage1-linux
+assert_linux
 
 TOP=`pwd`
 
-get_and_extract_nightly
-#git clone --depth 1 --branch ${BRANCH} ${REPO}
-cd rust-nightly
-./configure --prefix=${TOP}/install
+ROOT=${TOP}/stage1-linux
+
+mkdir -p ${ROOT}
+
+cd ${ROOT}
+extract_source_into rust
+cd rust
+./configure --prefix=${ROOT}/install --disable-docs
 cd src/llvm
-patch -p1 < ${TOP}/../patch-llvm
+patch -p1 < ${TOP}/patch-llvm
 cd ../..
 
 make

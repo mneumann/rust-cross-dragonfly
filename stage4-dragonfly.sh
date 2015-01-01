@@ -2,10 +2,7 @@
 
 . ./config.sh
 
-if [ `uname -s` != "DragonFly" ]; then
-  echo "You have to run this on DragonFly!"
-  exit 1
-fi
+assert_dragonfly
 
 TOP=`pwd`
 LOCAL_RUST_ROOT=${TOP}/stage3-dragonfly
