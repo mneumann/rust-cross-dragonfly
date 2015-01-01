@@ -11,6 +11,12 @@ RUST_SRC=${ROOT}/rust
 RUST_PREFIX=${ROOT}/install
 RUSTC=${RUST_PREFIX}/bin/rustc
 
+if [ ! -e "stage1-dragonfly" ]; then
+  if [ -e "stage1-dragonfly.tgz" ]; then
+    tar xvzf stage1-dragonfly.tgz
+  fi
+fi
+
 if [ ! -e "stage1-dragonfly/libs" ]; then
   echo "need stage1-dragonfly/libs!"
   exit 1
