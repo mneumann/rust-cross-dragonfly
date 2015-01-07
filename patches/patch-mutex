@@ -1,0 +1,10 @@
+--- a/src/libstd/sys/unix/mutex.rs
++++ b/src/libstd/sys/unix/mutex.rs
+@@ -50,6 +50,6 @@
+     #[inline]
+     pub unsafe fn destroy(&self) {
+         let r = ffi::pthread_mutex_destroy(self.inner.get());
+-        debug_assert_eq!(r, 0);
++        //debug_assert_eq!(r, 0);
+     }
+ }

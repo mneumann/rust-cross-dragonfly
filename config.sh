@@ -1,6 +1,6 @@
 BRANCH=master
 REPO=https://github.com/rust-lang/rust.git
-USE_GIT=YES
+USE_GIT=NO
 
 CC=cc
 CFLAGS="-m64 -fPIC"
@@ -57,8 +57,10 @@ extract_source_into() {
     fi
     git clone --depth 1 --branch ${BRANCH} ${opts} --recursive ${REPO} $1
   else
-    ${FETCH} https://static.rust-lang.org/dist/rust-nightly.tar.gz
-    tar xvzf rust-nightly.tar.gz
+    if [ ! -e "rust-nightly-src.tar.gz" ]; then
+        ${FETCH} https://static.rust-lang.org/dist/rust-nightly-src.tar.gz
+    fi
+    tar xvzf rust-nightly-src.tar.gz
     if [ "$1" != "rust-nightly" ]; then
       mv rust-nightly $1
     fi
@@ -67,5 +69,7 @@ extract_source_into() {
 
 patch_source() {
   cd ${RUST_SRC}
-  patch -p1 < ${TOP}/patch-thread-local
+  for file in ${TOP}/patches/patch-*; do
+    patch -p1 < ${file}
+  done
 }
