@@ -53,9 +53,12 @@ extract_source_into() {
   if [ "${USE_GIT}" = "YES" ]; then
     opts=""
     if [ "$2" != "" ]; then
-      opts="--reference $2"
+      opts="${opts} --reference $2"
     fi
-    git clone --depth 1 --branch ${BRANCH} ${opts} --recursive ${REPO} $1
+    if [ "${GIT_NON_RECURSIVE}" != "YES" ]; then
+      opts="${opts} --recursive"
+    fi
+    git clone --depth 1 --branch ${BRANCH} ${opts} ${REPO} $1
   else
     if [ ! -e "rust-nightly-src.tar.gz" ]; then
         ${FETCH} https://static.rust-lang.org/dist/rust-nightly-src.tar.gz
