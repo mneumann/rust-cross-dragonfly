@@ -1,6 +1,7 @@
 BRANCH=master
+COMMIT=00b112c45a604fa6f4b59af2a40c9deeadfdb7c6
 REPO=https://github.com/rust-lang/rust.git
-USE_GIT=NO
+USE_GIT=YES
 
 CC=cc
 CFLAGS="-m64 -fPIC"
@@ -59,6 +60,9 @@ extract_source_into() {
       opts="${opts} --recursive"
     fi
     git clone --depth 1 --branch ${BRANCH} ${opts} ${REPO} $1
+    p=`pwd`
+    cd $1 && git checkout ${COMMIT}
+    cd $p
   else
     if [ ! -e "rust-nightly-src.tar.gz" ]; then
         ${FETCH} https://static.rust-lang.org/dist/rust-nightly-src.tar.gz
