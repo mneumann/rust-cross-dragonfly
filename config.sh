@@ -59,7 +59,7 @@ extract_source_into() {
     if [ "${GIT_NON_RECURSIVE}" != "YES" ]; then
       opts="${opts} --recursive"
     fi
-    git clone --depth 1 --branch ${BRANCH} ${opts} ${REPO} $1
+    git clone --branch ${BRANCH} ${opts} ${REPO} $1
     p=`pwd`
     cd $1 && git checkout ${COMMIT}
     cd $p
