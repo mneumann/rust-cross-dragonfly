@@ -27,7 +27,6 @@ mkdir -p ${ROOT}
 if [ ! -e ${RUST_SRC} ]; then
   cd ${ROOT}
   extract_source_into rust
-  patch_source
 fi
 
 if [ ! -e "${RUSTC}" ]; then
@@ -37,9 +36,8 @@ if [ ! -e "${RUSTC}" ]; then
   extract_source_into rust
   cd rust
   ./configure --prefix=${ROOT}/install --disable-docs
-  cd src/llvm
-  patch -p1 < ${TOP}/patch-llvm
-  cd ../..
+  patch_source
+  cd ${RUST_SRC}
 
   make || exit 1
   make install || exit 1
