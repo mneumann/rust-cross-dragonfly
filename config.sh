@@ -3,8 +3,13 @@ COMMIT=00b112c45a604fa6f4b59af2a40c9deeadfdb7c6
 REPO=https://github.com/rust-lang/rust.git
 USE_GIT=NO
 
+if [ "${USE_NIGHTLY}" = "YES" ]; then
+PACKAGE=rustc-nightly-src.tar.gz
+PACKAGE_DIR=rustc-nightly
+else
 PACKAGE=rustc-1.0.0-alpha-src.tar.gz
 PACKAGE_DIR=rustc-1.0.0-alpha
+fi
 
 CC=cc
 CFLAGS="-m64 -fPIC"
