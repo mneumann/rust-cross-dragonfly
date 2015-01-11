@@ -1,7 +1,10 @@
 BRANCH=master
 COMMIT=00b112c45a604fa6f4b59af2a40c9deeadfdb7c6
 REPO=https://github.com/rust-lang/rust.git
-USE_GIT=YES
+USE_GIT=NO
+
+PACKAGE=rustc-1.0.0-alpha-src.tar.gz
+PACKAGE_DIR=rustc-1.0.0-alpha
 
 CC=cc
 CFLAGS="-m64 -fPIC"
@@ -64,12 +67,12 @@ extract_source_into() {
     cd $1 && git checkout ${COMMIT}
     cd $p
   else
-    if [ ! -e "rust-nightly-src.tar.gz" ]; then
-        ${FETCH} https://static.rust-lang.org/dist/rust-nightly-src.tar.gz
+    if [ ! -e "${PACKAGE}" ]; then
+        ${FETCH} https://static.rust-lang.org/dist/${PACKAGE}
     fi
-    tar xvzf rust-nightly-src.tar.gz
-    if [ "$1" != "rust-nightly" ]; then
-      mv rust-nightly $1
+    tar xvzf ${PACKAGE}
+    if [ "$1" != "${PACKAGE_DIR}" ]; then
+      mv ${PACKAGE_DIR} $1
     fi
   fi
 }
