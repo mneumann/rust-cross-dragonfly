@@ -28,9 +28,9 @@ cd ${RUST_SRC}
 
 export RUST_BACKTRACE=1
 
-./configure --llvm-root=${LLVM_ROOT} --enable-local-rust --local-rust-root=${LOCAL_RUST_ROOT} --prefix=$PREFIX --disable-docs 2>stage4.err >stage4.out
+./configure --llvm-root=${LLVM_ROOT} --enable-local-rust --local-rust-root=${LOCAL_RUST_ROOT} --prefix=$PREFIX --disable-docs
 
-gmake 2>>stage4.err >>stage4.out
+gmake
 
 p=`pwd`
 

@@ -1,0 +1,16 @@
+--- a/mk/main.mk
++++ b/mk/main.mk
+@@ -468,11 +468,11 @@
+ # from (the stage0 build host). Otherwise the relative rpaths
+ # inside of the rustc binary won't get resolved correctly.
+ ifeq ($(1),0)
+-ifneq ($(strip $(CFG_BUILD)),$(strip $(3)))
++#ifneq ($(strip $(CFG_BUILD)),$(strip $(3)))
+ CFGFLAG$(1)_T_$(2)_H_$(3) = stage1
+ 
+ RPATH_VAR$(1)_T_$(2)_H_$(3) := $$(TARGET_RPATH_VAR$(1)_T_$(2)_H_$(3))
+-endif
++#endif
+ endif
+ 
+ STAGE$(1)_T_$(2)_H_$(3) := \
