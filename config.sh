@@ -2,6 +2,7 @@ BRANCH=master
 COMMIT=00b112c45a604fa6f4b59af2a40c9deeadfdb7c6
 REPO=https://github.com/rust-lang/rust.git
 USE_GIT=NO
+USE_NIGHTLY=YES
 
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
