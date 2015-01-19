@@ -4,6 +4,14 @@
 
 assert_dragonfly
 
+if [ -e "/usr/local/bin/rustc" ]; then
+  echo "Does not work when rustc installed! Please remove rustc:"
+  echo "  rm /usr/local/bin/{rustc,rust-gdb,rustdoc}"
+  echo "  rm -rf /usr/local/lib/lib*-????????.so"
+  echo "  rm -rf /usr/local/lib/rustlib"
+  exit 1
+fi
+
 TOP=`pwd`
 PREFIX=/usr/local
 DST_DIR=${TOP}/stage4-dragonfly
@@ -28,6 +36,7 @@ cd ${RUST_SRC}
 
 export RUST_BACKTRACE=1
 
+# --enable-rpath ??
 ./configure --llvm-root=${LLVM_ROOT} --enable-local-rust --local-rust-root=${LOCAL_RUST_ROOT} --prefix=$PREFIX --disable-docs
 
 gmake
