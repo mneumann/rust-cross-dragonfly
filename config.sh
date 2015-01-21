@@ -1,8 +1,8 @@
 BRANCH=master
 COMMIT=54c9a4655b8c662b5ce3a7ad8a47a4d4d12e78b7
 REPO=https://github.com/rust-lang/rust.git
-USE_GIT=YES
-USE_NIGHTLY=NO
+USE_GIT=NO
+USE_NIGHTLY=YES
 
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
@@ -27,6 +27,16 @@ assert_linux() {
   if [ `uname -s` != "Linux" ]; then
     echo "You have to run this on Linux!"
     exit 1
+  fi
+}
+
+gen_md5() {
+  if [ `uname -s` = "Linux" ]; then
+	  md5sum $1
+  elif [ `uname -s` = "DragonFly" ]; then
+	  md5 $1
+  else
+	  md5 $1
   fi
 }
 
@@ -77,6 +87,7 @@ extract_source_into() {
         ${FETCH} https://static.rust-lang.org/dist/${PACKAGE}
     fi
     tar xvzf ${PACKAGE}
+    gen_md5 ${PACKAGE} > package.md5
     if [ "$1" != "${PACKAGE_DIR}" ]; then
       mv ${PACKAGE_DIR} $1
     fi

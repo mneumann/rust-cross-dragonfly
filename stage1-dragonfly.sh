@@ -92,6 +92,6 @@ cd ${TOP}
 python ${RUST_SRC}/src/etc/mklldeps.py stage1-dragonfly/llvmdeps.rs "x86 arm mips ipo bitreader bitwriter linker asmparser mcjit interpreter instrumentation" true "${LLVM_TARGET}/bin/llvm-config"
 
 cd ${TOP}
-tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB} stage1-dragonfly/llvmdeps.rs
+tar cvzf stage1-dragonfly.tgz stage1-dragonfly/${TARGET_SUB} stage1-dragonfly/llvmdeps.rs stage1-dragonfly/package.md5
 
 echo "Please copy stage1-dragonfly.tgz onto your Linux machine and extract it"
