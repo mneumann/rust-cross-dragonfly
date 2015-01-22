@@ -32,7 +32,7 @@ assert_linux() {
 
 gen_md5() {
   if [ `uname -s` = "Linux" ]; then
-	  md5sum $1
+	  md5sum --tag $1
   elif [ `uname -s` = "DragonFly" ]; then
 	  md5 $1
   else
