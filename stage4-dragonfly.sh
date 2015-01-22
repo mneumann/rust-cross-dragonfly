@@ -34,14 +34,15 @@ fi
 
 cd ${RUST_SRC}
 
-export RUST_BACKTRACE=1
+#export RUST_BACKTRACE=1
 
 # --enable-rpath ??
 ./configure --llvm-root=${LLVM_ROOT} --enable-local-rust --local-rust-root=${LOCAL_RUST_ROOT} --prefix=$PREFIX --disable-docs
 
 gmake
 
-p=`pwd`
+gmake dist
 
-gmake snap-stage3
-echo "To install to $PREFIX: cd $p && gmake install"
+#p=`pwd`
+#gmake snap-stage3
+#echo "To install to $PREFIX: cd $p && gmake install"
