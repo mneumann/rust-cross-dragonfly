@@ -8,7 +8,13 @@ TOP=`pwd`
 
 ROOT=${TOP}/stage2-linux
 RUST_SRC=${ROOT}/rust
-RUST_PREFIX=${ROOT}/install
+
+if [ "$USE_LOCAL_RUST" = "YES" ]; then
+  RUST_PREFIX=/usr/local
+else
+  RUST_PREFIX=${ROOT}/install
+fi
+
 RUSTC=${RUST_PREFIX}/bin/rustc
 
 if [ ! -e "stage1-dragonfly" ]; then
@@ -29,22 +35,28 @@ if [ ! -e ${RUST_SRC} ]; then
   extract_source_into rust
 fi
 
-if [ ! -e "${RUSTC}" ]; then
-  echo "${RUSTC} does not exist! Generating..."
-
-  cd ${ROOT}
-  extract_source_into rust
-  cd rust
-  ./configure --prefix=${ROOT}/install --disable-docs
-  patch_source
+if [ "$USE_LOCAL_RUST" != "YES" ]; then
+  cd ${ROOT}/rust
+  ./configure --prefix=${RUST_PREFIX} --disable-docs
+  #patch_source
   cd ${RUST_SRC}
-
   make || exit 1
   make install || exit 1
 fi
 
+if [ "$USE_GIT" != "YES" ]; then
+  cd $ROOT
+  MD5_DF=`cat ${TOP}/stage1-dragonfly/package.md5`
+  MD5=`gen_md5 ${PACKAGE}`
+  if [ "${MD5_DF}" != "${MD5}" ]; then
+    echo "invalid md5 sum"
+    exit 1
+  fi
+fi
+
 TARGET=x86_64-unknown-dragonfly
 RUSTC_FLAGS="--target ${TARGET}"
+RUSTC_FLAGS="${RUSTC_FLAGS} --cfg stage1"
 DF_LIB_DIR=${TOP}/stage1-dragonfly/libs
 RS_LIB_DIR=${ROOT}/rust-libs
 
@@ -52,16 +64,15 @@ export LD_LIBRARY_PATH=${RUST_PREFIX}/lib
 
 mkdir -p ${RS_LIB_DIR}
 
+export CFG_RELEASE="1.0.0-nightly"
+export CFG_VER_HASH="${COMMIT}"
+export CFG_SHORT_VER_HASH="${SHORT_COMMIT}"
+export CFG_VER_DATE="`date '+%F %T %z'`"
+export CFG_VERSION="${CFG_RELEASE} (${CFG_SHORT_VER_HASH} ${CFG_VER_DATE})"
 
-# XXX
-export CFG_VERSION="0.13.0-pre-nightly"
-export CFG_RELEASE="dragonfly-cross"
-export CFG_VER_HASH="hash"
-export CFG_VER_DATE="`date`"
 export CFG_COMPILER_HOST_TRIPLE="x86_64-unknown-dragonfly"
 export CFG_PREFIX="/usr/local"
 
-RUST_FLAGS="--cfg jemalloc"
 
 export CFG_LLVM_LINKAGE_FILE=${TOP}/stage1-dragonfly/llvmdeps.rs
 
