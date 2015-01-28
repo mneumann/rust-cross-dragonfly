@@ -41,7 +41,7 @@ cd ${RUST_SRC}
 
 gmake
 
-gmake dist
+gmake snap-stage3
 
 #p=`pwd`
 #gmake snap-stage3
