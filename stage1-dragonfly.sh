@@ -23,7 +23,7 @@ echo "-- RUST_SRC: ${RUST_SRC}"
 
 cd ${ROOT}
 extract_source_into rust
-patch_source
+patch_source llvm
 
 cd ${RUST_SRC}/src
 mkdir llvm-build

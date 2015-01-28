@@ -38,7 +38,7 @@ fi
 if [ "$USE_LOCAL_RUST" != "YES" ]; then
   cd ${ROOT}/rust
   ./configure --prefix=${RUST_PREFIX} --disable-docs
-  #patch_source
+  patch_source llvm
   cd ${RUST_SRC}
   make || exit 1
   make install || exit 1

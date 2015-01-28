@@ -29,7 +29,7 @@ mkdir -p ${DST_DIR}
 if [ ! -e ${RUST_SRC} ]; then
   cd ${DST_DIR}
   extract_source_into rust
-  patch_source
+  patch_source_all
 fi
 
 cd ${RUST_SRC}

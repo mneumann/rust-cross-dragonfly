@@ -6,6 +6,8 @@ USE_GIT=YES
 USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
 
+ALL_PATCHES="llvm main-mk"
+
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
 PACKAGE_DIR=rustc-nightly
@@ -98,7 +100,11 @@ extract_source_into() {
 
 patch_source() {
   cd ${RUST_SRC}
-  for file in ${TOP}/patches/patch-*; do
-    patch -p1 < ${file}
+  patch -p1 < ${TOP}/patches/patch-$1
+}
+
+patch_source_all() {
+  for patch in ${ALL_PATCHES}; do
+    patch_source $patch
   done
 }
