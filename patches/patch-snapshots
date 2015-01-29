@@ -1,0 +1,9 @@
+--- a/src/snapshots.txt
++++ b/src/snapshots.txt
+@@ -1,5 +1,6 @@
+ S 2015-01-20 9006c3c
+   freebsd-x86_64 240b30b33263d175e30f925ed1e1e1a4e553a513
++  dragonfly-x86_64 0bb1d3eedbcd0b36ab01e4ac0539fb8a393c348d
+   linux-i386 544c2063b8d5035342c705b881b8868244c1e9a1
+   linux-x86_64 eb41db80978210a013a8dcf8f4fe804969197337
+   macos-i386 3ed08c5ae66367e85b8f2b207615d45bfd9cf89d
