@@ -6,7 +6,7 @@ USE_GIT=YES
 USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
 
-ALL_PATCHES="llvm main-mk"
+ALL_PATCHES="llvm main-mk libstd-unix-c"
 
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
