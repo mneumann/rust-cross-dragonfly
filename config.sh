@@ -51,7 +51,7 @@ RUST_CRATES="${RUST_CRATES} rustc_typeck rustc_trans rustc_resolve rustc_privacy
 
 LLVM_LIBRARIES="LTO ObjCARCOpts Linker ipo Vectorize BitWriter IRReader AsmParser R600CodeGen R600Desc"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} R600Info R600AsmPrinter SystemZDisassembler SystemZCodeGen SystemZAsmParser"
-LLVM_LIBRARIES="${LLVM_LIBRARIES} SystemZDesc SystemZInfo SystemZAsmPrinter HexagonCodeGen HexagonAsmPrinter"
+LLVM_LIBRARIES="${LLVM_LIBRARIES} SystemZDesc SystemZInfo SystemZAsmPrinter HexagonCodeGen"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} HexagonDesc HexagonInfo NVPTXCodeGen NVPTXDesc NVPTXInfo NVPTXAsmPrinter"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} CppBackendCodeGen CppBackendInfo MSP430CodeGen MSP430Desc MSP430Info"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} MSP430AsmPrinter XCoreDisassembler XCoreCodeGen XCoreDesc XCoreInfo"
