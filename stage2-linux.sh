@@ -33,6 +33,7 @@ mkdir -p ${ROOT}
 if [ ! -e ${RUST_SRC} ]; then
   cd ${ROOT}
   extract_source_into rust
+  patch_source libstd-unix-c
 fi
 
 if [ "$USE_LOCAL_RUST" != "YES" ]; then
