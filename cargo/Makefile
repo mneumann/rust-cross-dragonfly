@@ -116,20 +116,58 @@ LIB_tar_DIR=tar-rs
 LIB_ssh2_REV=e42ed21fe9174291189ab4488207c90578a0afed
 LIB_ssh2_REP=${GH}/alexcrichton/ssh2-rs
 LIB_ssh2_DIR=ssh2-rs
-LIB_ssh2_DEP=${CARGOLIB}/libbitflags.rlib ${CARGOLIB}/libssh2-sys.rlib
+LIB_ssh2_DEP=${CARGOLIB}/libbitflags.rlib ${CARGOLIB}/liblibssh2-sys.rlib
 
-LIB_ssh2_sys_NAM=ssh2-sys
-LIB_ssh2_sys_DIR=ssh2-rs
-LIB_ssh2_sys_SRC=libssh2-sys
-LIB_ssh2_sys_DEP=${CARGOLIB}/liblibz-sys.rlib ${CARGOLIB}/libopenssl-sys.rlib
+LIB_libssh2_sys_NAM=libssh2-sys
+LIB_libssh2_sys_DIR=ssh2-rs
+LIB_libssh2_sys_SRC=libssh2-sys
+LIB_libssh2_sys_DEP=${CARGOLIB}/liblibz-sys.rlib ${CARGOLIB}/libopenssl-sys.rlib
 
 LIB_bitflags_REV=78241d80cb9d0e1d64976afd8be6d35dd58824b0
 LIB_bitflags_REP=${GH}/rust-lang/bitflags
 LIB_bitflags_VER=0.1.1
 
+LIB_hamcrest_REV=70d572f27ebbffb5a8d67ed2c890241d6d82d0a3
+LIB_hamcrest_REP=${GH}/carllerche/hamcrest-rust.git
+LIB_hamcrest_DIR=hamcrest-rust
+LIB_hamcrest_SRC=src/hamcrest
+
+LIB_flate2_REV=b45ad35f456539c28dbb77474d34ea4a3deb7d68
+LIB_flate2_REP=${GH}/alexcrichton/flate2-rs
+LIB_flate2_DIR=flate2-rs
+LIB_flate2_DEP=${CARGOLIB}/libminiz-sys.rlib
+
+LIB_miniz_sys_NAM=miniz-sys
+LIB_miniz_sys_DIR=flate2-rs
+LIB_miniz_sys_SRC=miniz-sys
+LIB_miniz_sys_DEP=${CARGOLIB}/libminiz.a
+
+LIB_git2_NAM=git2
+LIB_git2_REV=9682fe1702d975e1cc48a668dad771cad50c92ca
+LIB_git2_VER=0.1.17
+LIB_git2_REP=${GH}/alexcrichton/git2-rs
+LIB_git2_DIR=git2-rs
+LIB_git2_DEP=${CARGOLIB}/liblibgit2-sys.rlib
+
+LIB_libgit2_sys_NAM=libgit2-sys
+LIB_libgit2_sys_DIR=git2-rs
+LIB_libgit2_sys_SRC=libgit2-sys
+LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so ${CARGOLIB}/liblibssh2-sys.rlib \
+		 ${CARGOLIB}/libopenssl-sys.rlib \
+		 ${CARGOLIB}/liblibz-sys.rlib
+
+LIB_cargo_NAM=cargo
+#LIB_cargo_REV=0caa5b58fd4aac95d3388bed878797becf544215
+#LIB_cargo_REV=dfd4868c0993f3a0ad24ae6032d05c8142c5596e
+#LIB_cargo_REV=9a9ea5a4b88bef1c9dc38acc2e5af589a87fc196
+LIB_cargo_REV=893c8740ba08108e960e15e9436255a17b2481a2
+LIB_cargo_REP=${GH}/rust-lang/cargo.git
+LIB_cargo_SRC=src/cargo
+
 ALL_LIBS=gcc semver rustc_serialize regex docopt glob libz_sys \
 	 openssl_sys openssl url matches pkg_config toml curl curl_sys \
-	 tar ssh2 ssh2_sys bitflags
+	 tar ssh2 libssh2_sys bitflags hamcrest flate2 miniz_sys \
+	 git2 libgit2_sys cargo
 
 .for L in ${ALL_LIBS}
 LIB_${L}_NAM?=${L}
@@ -154,14 +192,6 @@ ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib: \
 
 ${WRKDIR}/libgit2/f1a374a67da77f85276b42d5d57cdcf2f0a05c08:
 	sh git-fetch.sh ${.TARGET} ${GH}/alexcrichton/libgit2.git
-${WRKDIR}/flate2-rs/c8ecf7a411bc6d43bf885f487c01e536490f2aea:
-	sh git-fetch.sh ${.TARGET} ${GH}/alexcrichton/flate2-rs
-${WRKDIR}/git2-rs/0a97e47340323c73e7bb9d294d462f8238ff265d:
-	sh git-fetch.sh ${.TARGET} ${GH}/alexcrichton/git2-rs
-${WRKDIR}/hamcrest-rust/2b9bd6cdae5dcf08acac84371fe889dc8eb5c528:
-	sh git-fetch.sh ${.TARGET} ${GH}/carllerche/hamcrest-rust.git
-${WRKDIR}/cargo/0caa5b58fd4aac95d3388bed878797becf544215:
-	sh git-fetch.sh ${.TARGET} ${GH}/rust-lang/cargo.git
 
 
 # build instructions
