@@ -157,17 +157,36 @@ LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so ${CARGOLIB}/liblibssh2-sys.rlib \
 		 ${CARGOLIB}/liblibz-sys.rlib
 
 LIB_cargo_NAM=cargo
-#LIB_cargo_REV=0caa5b58fd4aac95d3388bed878797becf544215
-#LIB_cargo_REV=dfd4868c0993f3a0ad24ae6032d05c8142c5596e
-#LIB_cargo_REV=9a9ea5a4b88bef1c9dc38acc2e5af589a87fc196
-LIB_cargo_REV=893c8740ba08108e960e15e9436255a17b2481a2
-LIB_cargo_REP=${GH}/rust-lang/cargo.git
+LIB_cargo_REV=dfd4868
+LIB_cargo_REP=${GH}/mneumann/cargo.git
 LIB_cargo_SRC=src/cargo
+LIB_cargo_DEP=${CARGOLIB}/liblog.rlib ${CARGOLIB}/libterm.rlib \
+	      ${CARGOLIB}/libtime.rlib
+
+LIB_cargo_ENV=CARGO_PKG_VERSION_MAJOR=0 \
+	      CARGO_PKG_VERSION_MINOR=0 \
+	      CARGO_PKG_VERSION_PATCH=1
+
+LIB_cargo_registry_NAM=registry
+LIB_cargo_registry_DIR=cargo
+LIB_cargo_registry_SRC=src/registry
+
+LIB_log_REV=443249e
+LIB_log_VER=0.2.3
+LIB_log_REP=${GH}/rust-lang/log.git
+
+LIB_term_REV=73c68ec20d
+LIB_term_VER=0.1.11
+LIB_term_REP=${GH}/rust-lang/term.git
+
+LIB_time_REV=8995907
+LIB_time_REP=${GH}/rust-lang/time.git
+
 
 ALL_LIBS=gcc semver rustc_serialize regex docopt glob libz_sys \
 	 openssl_sys openssl url matches pkg_config toml curl curl_sys \
 	 tar ssh2 libssh2_sys bitflags hamcrest flate2 miniz_sys \
-	 git2 libgit2_sys cargo
+	 git2 libgit2_sys cargo cargo_registry log term time
 
 .for L in ${ALL_LIBS}
 LIB_${L}_NAM?=${L}
@@ -176,7 +195,7 @@ LIB_${L}_SRC?=src
 
 .if defined(LIB_${L}_REP)
 ${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_REV}:
-	sh git-fetch.sh ${.TARGET} ${LIB_${L}_REP}
+	@sh git-fetch.sh ${.TARGET} ${LIB_${L}_REP}
 .endif
 
 lib${L}: ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib
@@ -184,8 +203,8 @@ lib${L}: ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib
 ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib: \
 		${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_REV}  \
 		${LIB_${L}_DEP}
-	echo "*** Build ${L}"
-	${RUSTC} ${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_SRC}/lib.rs --crate-type lib --crate-name ${LIB_${L}_NAM} --out-dir ${CARGOLIB} -L ${CARGOLIB}/
+	@echo "*** Build ${L}"
+	${LIB_${L}_ENV} ${RUSTC} ${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_SRC}/lib.rs --crate-type lib --crate-name ${LIB_${L}_NAM} --out-dir ${CARGOLIB} -L ${CARGOLIB}/
 .endfor
 
 # fetch instructions
