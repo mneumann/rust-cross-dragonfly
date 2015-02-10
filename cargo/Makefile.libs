@@ -1,24 +1,21 @@
 LIB_gcc_NAM=gcc
-LIB_gcc_DEP=
 LIB_gcc_REV=9904334cbfb5ee40c9583aa1cf94b45102b93c6d
 LIB_gcc_DIR=gcc-rs
 LIB_gcc_REP=${GH}/alexcrichton/gcc-rs
 
-LIB_semver_DEP=
 LIB_semver_REV=90a052ec5d4e871aa290e208780950e437bb37ab
 LIB_semver_REP=${GH}/rust-lang/semver
 
 LIB_rustc_serialize_NAM=rustc-serialize
-LIB_rustc_serialize_DEP=
 LIB_rustc_serialize_REV=c89c3343c9a7781c2a8ecfb5547853a2171745f5
 LIB_rustc_serialize_DIR=rustc-serialize
 LIB_rustc_serialize_REP=${GH}/rust-lang/rustc-serialize
 
-LIB_regex_DEP=${CARGOLIB}/librustc-serialize.rlib
+LIB_regex_DEP=librustc_serialize
 LIB_regex_REV=90ef3c4b58140d672ed97cdf45e59592d122368e
 LIB_regex_REP=${GH}/rust-lang/regex.git
 
-LIB_docopt_DEP=${CARGOLIB}/libregex.rlib
+LIB_docopt_DEP=libregex
 LIB_docopt_REV=6e9ceb2301418a0330e02391d20343ef2d66f0e4
 LIB_docopt_REP=${GH}/docopt/docopt.rs
 
@@ -43,7 +40,7 @@ LIB_openssl_sys_SRC=openssl-sys/src
 LIB_url_REV=16923fb0a9c92a2ee5f42760812d9bfa1ea3f8f4
 LIB_url_DIR=rust-url
 LIB_url_REP=${GH}/servo/rust-url
-LIB_url_DEP=${CARGOLIB}/librustc-serialize.rlib ${CARGOLIB}/libmatches.rlib
+LIB_url_DEP=librustc_serialize libmatches
 
 LIB_matches_REV=1240fab4ad404417bd439a1a1b0c36d00790d3e0
 LIB_matches_DIR=rust-std-candidates
@@ -60,18 +57,18 @@ LIB_toml_REV=00420259044e9e961b9d8a80e5482ffc58250145
 LIB_toml_VER=0.1.16
 LIB_toml_REP=${GH}/alexcrichton/toml-rs.git
 LIB_toml_DIR=toml-rs
-LIB_toml_DEP=${CARGOLIB}/librustc-serialize.rlib
+LIB_toml_DEP=librustc_serialize
 
 LIB_curl_REV=9181ea8f4ea2c7eb60224b5ebf464751165e2881
 LIB_curl_VER=0.1.14
 LIB_curl_REP=${GH}/carllerche/curl-rust
 LIB_curl_DIR=curl-rust
-LIB_curl_DEP=${CARGOLIB}/libcurl-sys.rlib
+LIB_curl_DEP=libcurl_sys
 
 LIB_curl_sys_NAM=curl-sys
 LIB_curl_sys_DIR=curl-rust
 LIB_curl_sys_SRC=curl-sys
-LIB_curl_sys_DEP=${CARGOLIB}/liblibz-sys.rlib
+LIB_curl_sys_DEP=liblibz_sys
 
 LIB_tar_REV=60f0ad391c37539a9f99100c7bbeb0c6b7c71ef7
 LIB_tar_REP=${GH}/alexcrichton/tar-rs
@@ -79,12 +76,12 @@ LIB_tar_VER=0.1.10
 LIB_tar_DIR=tar-rs
 
 LIB_ssh2_DIR=ssh2-rs
-LIB_ssh2_DEP=${CARGOLIB}/libbitflags.rlib ${CARGOLIB}/liblibssh2-sys.rlib
+LIB_ssh2_DEP=libbitflags liblibssh2_sys
 
 LIB_libssh2_sys_NAM=libssh2-sys
 LIB_libssh2_sys_DIR=ssh2-rs
 LIB_libssh2_sys_SRC=libssh2-sys
-LIB_libssh2_sys_DEP=${CARGOLIB}/liblibz-sys.rlib ${CARGOLIB}/libopenssl-sys.rlib
+LIB_libssh2_sys_DEP=liblibz_sys libopenssl_sys
 LIB_libssh2_sys_REV=e42ed21fe9174291189ab4488207c90578a0afed
 LIB_libssh2_sys_REP=${GH}/alexcrichton/ssh2-rs
 
@@ -100,7 +97,7 @@ LIB_hamcrest_SRC=src/hamcrest
 LIB_flate2_REV=b45ad35f456539c28dbb77474d34ea4a3deb7d68
 LIB_flate2_REP=${GH}/alexcrichton/flate2-rs
 LIB_flate2_DIR=flate2-rs
-LIB_flate2_DEP=${CARGOLIB}/libminiz-sys.rlib
+LIB_flate2_DEP=libminiz_sys
 
 LIB_miniz_sys_NAM=miniz-sys
 LIB_miniz_sys_DIR=flate2-rs
@@ -109,7 +106,7 @@ LIB_miniz_sys_DEP=${CARGOLIB}/libminiz.a
 
 LIB_git2_NAM=git2
 LIB_git2_DIR=git2-rs
-LIB_git2_DEP=${CARGOLIB}/liblibgit2-sys.rlib
+LIB_git2_DEP=liblibgit2_sys
 
 LIB_libgit2_sys_NAM=libgit2-sys
 LIB_libgit2_sys_REV=9682fe1702d975e1cc48a668dad771cad50c92ca
@@ -117,27 +114,23 @@ LIB_libgit2_sys_VER=0.1.17
 LIB_libgit2_sys_REP=${GH}/alexcrichton/git2-rs
 LIB_libgit2_sys_DIR=git2-rs
 LIB_libgit2_sys_SRC=libgit2-sys
-LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so ${CARGOLIB}/liblibssh2-sys.rlib \
-		 ${CARGOLIB}/libopenssl-sys.rlib \
-		 ${CARGOLIB}/liblibz-sys.rlib
+LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so liblibssh2_sys \
+		    libopenssl_sys liblibz_sys
 
 LIB_cargo_NAM=cargo
 LIB_cargo_REV=dfd4868
 LIB_cargo_REP=${GH}/mneumann/cargo.git
 LIB_cargo_SRC=src/cargo
-LIB_cargo_DEP=${CARGOLIB}/liblog.rlib ${CARGOLIB}/libterm.rlib \
-	      ${CARGOLIB}/libtime.rlib \
-	      ${CARGOLIB}/libregistry.rlib
+LIB_cargo_DEP=liblog libterm libtime libregistry
 LIB_cargo_OPT=--extern log=${CARGOLIB}/liblog.rlib \
 	      --extern term=${CARGOLIB}/libterm.rlib
-
 LIB_cargo_ENV=CARGO_PKG_VERSION_MAJOR=0 \
 	      CARGO_PKG_VERSION_MINOR=0 \
 	      CARGO_PKG_VERSION_PATCH=1
 
-LIB_cargo_registry_NAM=registry
-LIB_cargo_registry_DIR=cargo
-LIB_cargo_registry_SRC=src/registry
+LIB_registry_NAM=registry
+LIB_registry_DIR=cargo
+LIB_registry_SRC=src/registry
 
 LIB_log_REV=443249e
 LIB_log_VER=0.2.3
@@ -146,6 +139,7 @@ LIB_log_REP=${GH}/rust-lang/log.git
 LIB_term_REV=73c68ec20d
 LIB_term_VER=0.1.11
 LIB_term_REP=${GH}/rust-lang/term.git
+LIB_term_OPT=--extern log=${CARGOLIB}/liblog.rlib
 
 LIB_time_REV=8995907
 LIB_time_REP=${GH}/rust-lang/time.git
@@ -153,4 +147,4 @@ LIB_time_REP=${GH}/rust-lang/time.git
 ALL_LIBS=gcc semver rustc_serialize regex docopt glob libz_sys \
 	 openssl_sys openssl url matches pkg_config toml curl curl_sys \
 	 tar ssh2 libssh2_sys bitflags hamcrest flate2 miniz_sys \
-	 git2 libgit2_sys cargo cargo_registry log term time
+	 git2 libgit2_sys cargo registry log term time
