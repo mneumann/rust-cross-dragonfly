@@ -1,3 +1,7 @@
+#
+# pkg ins libgit2(version 0.22.1) libssh2
+#
+
 RUSTC=/usr/local/bin/rustc
 CC=cc
 AR=ar
@@ -32,7 +36,8 @@ all: mkdirs \
 	${CARGOLIB}/libtoml.rlib \
 	${CARGOLIB}/libpkg-config.rlib \
 	${CARGOLIB}/libminiz.a \
-	${CARGOLIB}/libcargo.rlib
+	${CARGOLIB}/libcargo.rlib \
+	cargo
 
 .include "Makefile.libs"
 
@@ -51,7 +56,7 @@ lib${L}: ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib
 ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib: \
 		${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_REV}  \
 		${LIB_${L}_DEP}
-	@echo "*** Build ${L}"
+	@echo "*** Build lib${L}"
 	${LIB_${L}_ENV} ${RUSTC} ${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_SRC}/lib.rs --crate-type lib ${LIB_${L}_OPT} --crate-name ${LIB_${L}_NAM} --out-dir ${CARGOLIB} -L ${CARGOLIB}/
 .endfor
 
@@ -71,12 +76,24 @@ ${DSTDIR}/lib/libgit2.so: ${WRKDIR}/libgit2/f1a374a67da77f85276b42d5d57cdcf2f0a0
 
 ${CARGOLIB}/libminiz.a: ${WRKDIR}/flate2-rs/c8ecf7a411bc6d43bf885f487c01e536490f2aea
 	echo "*** Build libminiz"
-	${CC} -c ${WRKDIR}/flate2-rs/miniz-sys/miniz.c -o ${CARGOLIB}/miniz.o
+	${CC} -fPIC -c ${WRKDIR}/flate2-rs/miniz-sys/miniz.c -o ${CARGOLIB}/miniz.o
 	${AR} -rc ${CARGOLIB}/libminiz.a ${CARGOLIB}/miniz.o
 	ranlib ${CARGOLIB}/libminiz.a
 	rm ${CARGOLIB}/miniz.o
 
+libminiz: ${CARGOLIB}/libminiz.a
+
+${DSTDIR}/bin/cargo: libcargo libenv_logger
+	echo "*** Build cargo"
+	${RUSTC} ${WRKDIR}/${LIB_cargo_DIR}/src/bin/cargo.rs \
+		--out-dir ${DSTDIR}/bin \
+		--extern log=${CARGOLIB}/liblog.rlib \
+		-L ${CARGOLIB}/ \
+		-lminiz -lcurl -lssl -lcrypto -lz -lssh2 -lgit2
+
+cargo: ${DSTDIR}/bin/cargo
+
 mkdirs: 
 	@mkdir -p ${WRKDIR}
-	@mkdir -p ${DSTDIR}
+	@mkdir -p ${DSTDIR}/lib ${DSTDIR}/bin
 	@mkdir -p ${CARGOLIB}
