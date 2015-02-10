@@ -6,38 +6,14 @@ RUSTC=/usr/local/bin/rustc
 CC=cc
 AR=ar
 
-WRKDIR=cargo/bootstrap
+WRKDIR=work
 DSTDIR=${HOME}/cargo/install
 TARGET=${HOME}/cargo/target
 
 CARGOLIB=${TARGET}/cargo-boostrap/lib
 GH=https://github.com
 
-all: mkdirs \
-	${DSTDIR}/lib/libgit2.so \
-	${CARGOLIB}/libsemver.rlib \
-	${CARGOLIB}/libdocopt.rlib \
-	${CARGOLIB}/libgcc.rlib \
-	${CARGOLIB}/libminiz-sys.rlib \
-	${CARGOLIB}/libflate2.rlib \
-	${CARGOLIB}/libglob.rlib \
-	${CARGOLIB}/liblibz-sys.rlib \
-	${CARGOLIB}/libopenssl-sys.rlib \
-	${CARGOLIB}/libopenssl.rlib \
-	${CARGOLIB}/liburl.rlib \
-	${CARGOLIB}/libcurl-sys.rlib \
-	${CARGOLIB}/libcurl.rlib \
-	${CARGOLIB}/libtar.rlib \
-	${CARGOLIB}/liblibssh2-sys.rlib \
-	${CARGOLIB}/libssh2.rlib \
-	${CARGOLIB}/liblibgit2-sys.rlib \
-	${CARGOLIB}/libgit2.rlib \
-	${CARGOLIB}/libhamcrest.rlib \
-	${CARGOLIB}/libtoml.rlib \
-	${CARGOLIB}/libpkg-config.rlib \
-	${CARGOLIB}/libminiz.a \
-	${CARGOLIB}/libcargo.rlib \
-	cargo
+cargo: mkdirs ${DSTDIR}/bin/cargo
 
 .include "Makefile.libs"
 
@@ -74,24 +50,21 @@ ${DSTDIR}/lib/libgit2.so: ${WRKDIR}/libgit2/f1a374a67da77f85276b42d5d57cdcf2f0a0
 	(cd ${WRKDIR}/libgit2/build && cmake .. -DCMAKE_INSTALL_PREFIX=${DSTDIR} -DBUILD_SHARED_LIBS=ON)
 	(cd ${WRKDIR}/libgit2/build && cmake --build . --target install)
 
-${CARGOLIB}/libminiz.a: ${WRKDIR}/flate2-rs/c8ecf7a411bc6d43bf885f487c01e536490f2aea
+${CARGOLIB}/libminiz.a: ${WRKDIR}/${LIB_flate2_DIR}/${LIB_flate2_REV}
 	echo "*** Build libminiz"
 	${CC} -fPIC -c ${WRKDIR}/flate2-rs/miniz-sys/miniz.c -o ${CARGOLIB}/miniz.o
 	${AR} -rc ${CARGOLIB}/libminiz.a ${CARGOLIB}/miniz.o
 	ranlib ${CARGOLIB}/libminiz.a
 	rm ${CARGOLIB}/miniz.o
 
-libminiz: ${CARGOLIB}/libminiz.a
-
 ${DSTDIR}/bin/cargo: libcargo libenv_logger
 	echo "*** Build cargo"
 	${RUSTC} ${WRKDIR}/${LIB_cargo_DIR}/src/bin/cargo.rs \
 		--out-dir ${DSTDIR}/bin \
 		--extern log=${CARGOLIB}/liblog.rlib \
-		-L ${CARGOLIB}/ \
+		-L ${CARGOLIB}/ -C link-args="-L${DSTDIR}/lib" \
 		-lminiz -lcurl -lssl -lcrypto -lz -lssh2 -lgit2
 
-cargo: ${DSTDIR}/bin/cargo
 
 mkdirs: 
 	@mkdir -p ${WRKDIR}

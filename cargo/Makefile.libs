@@ -32,6 +32,7 @@ LIB_openssl_REV=a68a74ff6b698f5240baac4819f8acf3da2e8ec5
 LIB_openssl_DIR=rust-openssl
 LIB_openssl_REP=${GH}/sfackler/rust-openssl
 LIB_openssl_SRC=openssl/src
+LIB_openssl_DEP=libopenssl_sys
 
 LIB_openssl_sys_NAM=openssl-sys
 LIB_openssl_sys_DIR=${LIB_openssl_DIR}
@@ -63,12 +64,12 @@ LIB_curl_REV=9181ea8f4ea2c7eb60224b5ebf464751165e2881
 LIB_curl_VER=0.1.14
 LIB_curl_REP=${GH}/carllerche/curl-rust
 LIB_curl_DIR=curl-rust
-LIB_curl_DEP=libcurl_sys
+LIB_curl_DEP=libcurl_sys liburl
 
 LIB_curl_sys_NAM=curl-sys
 LIB_curl_sys_DIR=curl-rust
 LIB_curl_sys_SRC=curl-sys
-LIB_curl_sys_DEP=liblibz_sys
+LIB_curl_sys_DEP=liblibz_sys libopenssl libopenssl_sys
 
 LIB_tar_REV=60f0ad391c37539a9f99100c7bbeb0c6b7c71ef7
 LIB_tar_REP=${GH}/alexcrichton/tar-rs
@@ -102,17 +103,18 @@ LIB_flate2_DEP=libminiz_sys
 LIB_miniz_sys_NAM=miniz-sys
 LIB_miniz_sys_DIR=flate2-rs
 LIB_miniz_sys_SRC=miniz-sys
-LIB_miniz_sys_DEP=libminiz
+LIB_miniz_sys_DEP=${CARGOLIB}/libminiz.a
 
 LIB_git2_NAM=git2
+LIB_git2_VER=0.1.17
+LIB_git2_REV=9682fe1702d975e1cc48a668dad771cad50c92ca
+LIB_git2_REP=${GH}/alexcrichton/git2-rs
 LIB_git2_DIR=git2-rs
-LIB_git2_DEP=liblibgit2_sys
+LIB_git2_DEP=liblibgit2_sys libbitflags
 
 LIB_libgit2_sys_NAM=libgit2-sys
-LIB_libgit2_sys_REV=9682fe1702d975e1cc48a668dad771cad50c92ca
-LIB_libgit2_sys_VER=0.1.17
-LIB_libgit2_sys_REP=${GH}/alexcrichton/git2-rs
-LIB_libgit2_sys_DIR=git2-rs
+LIB_libgit2_sys_DIR=${LIB_git2_DIR}
+LIB_libgit2_sys_REV=${LIB_git2_REV}
 LIB_libgit2_sys_SRC=libgit2-sys
 LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so liblibssh2_sys \
 		    libopenssl_sys liblibz_sys
@@ -121,7 +123,9 @@ LIB_cargo_NAM=cargo
 LIB_cargo_REV=9404539e80a3614b56f7cdfeec4eb2cd777ee912
 LIB_cargo_REP=${GH}/rust-lang/cargo.git
 LIB_cargo_SRC=src/cargo
-LIB_cargo_DEP=liblog libterm libtime libregistry
+LIB_cargo_DEP=liblog libterm libtime libregistry libregex \
+	      libdocopt libflate2 libgit2 libglob libsemver \
+	      libtar libtoml
 LIB_cargo_OPT=--extern log=${CARGOLIB}/liblog.rlib \
 	      --extern term=${CARGOLIB}/libterm.rlib
 LIB_cargo_ENV=CARGO_PKG_VERSION_MAJOR=0 \
@@ -131,6 +135,7 @@ LIB_cargo_ENV=CARGO_PKG_VERSION_MAJOR=0 \
 LIB_registry_NAM=registry
 LIB_registry_DIR=cargo
 LIB_registry_SRC=src/registry
+LIB_registry_DEP=libcurl
 
 LIB_log_REV=443249e
 LIB_log_VER=0.2.3
