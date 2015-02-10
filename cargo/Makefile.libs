@@ -118,8 +118,8 @@ LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so liblibssh2_sys \
 		    libopenssl_sys liblibz_sys
 
 LIB_cargo_NAM=cargo
-LIB_cargo_REV=dfd4868
-LIB_cargo_REP=${GH}/mneumann/cargo.git
+LIB_cargo_REV=9404539e80a3614b56f7cdfeec4eb2cd777ee912
+LIB_cargo_REP=${GH}/rust-lang/cargo.git
 LIB_cargo_SRC=src/cargo
 LIB_cargo_DEP=liblog libterm libtime libregistry
 LIB_cargo_OPT=--extern log=${CARGOLIB}/liblog.rlib \
