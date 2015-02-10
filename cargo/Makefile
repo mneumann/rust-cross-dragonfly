@@ -24,14 +24,15 @@ all: mkdirs \
 	${CARGOLIB}/libcurl-sys.rlib \
 	${CARGOLIB}/libcurl.rlib \
 	${CARGOLIB}/libtar.rlib \
-	${CARGOLIB}/libssh2-sys.rlib \
+	${CARGOLIB}/liblibssh2-sys.rlib \
 	${CARGOLIB}/libssh2.rlib \
-	${CARGOLIB}/libgit2-sys.rlib \
+	${CARGOLIB}/liblibgit2-sys.rlib \
 	${CARGOLIB}/libgit2.rlib \
 	${CARGOLIB}/libhamcrest.rlib \
 	${CARGOLIB}/libtoml.rlib \
 	${CARGOLIB}/libpkg-config.rlib \
-	${CARGOLIB}/libminiz.a
+	${CARGOLIB}/libminiz.a \
+	${CARGOLIB}/libcargo.rlib
 
 LIB_gcc_NAM=gcc
 LIB_gcc_DEP=
@@ -113,8 +114,6 @@ LIB_tar_REP=${GH}/alexcrichton/tar-rs
 LIB_tar_VER=0.1.10
 LIB_tar_DIR=tar-rs
 
-LIB_ssh2_REV=e42ed21fe9174291189ab4488207c90578a0afed
-LIB_ssh2_REP=${GH}/alexcrichton/ssh2-rs
 LIB_ssh2_DIR=ssh2-rs
 LIB_ssh2_DEP=${CARGOLIB}/libbitflags.rlib ${CARGOLIB}/liblibssh2-sys.rlib
 
@@ -122,6 +121,8 @@ LIB_libssh2_sys_NAM=libssh2-sys
 LIB_libssh2_sys_DIR=ssh2-rs
 LIB_libssh2_sys_SRC=libssh2-sys
 LIB_libssh2_sys_DEP=${CARGOLIB}/liblibz-sys.rlib ${CARGOLIB}/libopenssl-sys.rlib
+LIB_libssh2_sys_REV=e42ed21fe9174291189ab4488207c90578a0afed
+LIB_libssh2_sys_REP=${GH}/alexcrichton/ssh2-rs
 
 LIB_bitflags_REV=78241d80cb9d0e1d64976afd8be6d35dd58824b0
 LIB_bitflags_REP=${GH}/rust-lang/bitflags
@@ -143,13 +144,13 @@ LIB_miniz_sys_SRC=miniz-sys
 LIB_miniz_sys_DEP=${CARGOLIB}/libminiz.a
 
 LIB_git2_NAM=git2
-LIB_git2_REV=9682fe1702d975e1cc48a668dad771cad50c92ca
-LIB_git2_VER=0.1.17
-LIB_git2_REP=${GH}/alexcrichton/git2-rs
 LIB_git2_DIR=git2-rs
 LIB_git2_DEP=${CARGOLIB}/liblibgit2-sys.rlib
 
 LIB_libgit2_sys_NAM=libgit2-sys
+LIB_libgit2_sys_REV=9682fe1702d975e1cc48a668dad771cad50c92ca
+LIB_libgit2_sys_VER=0.1.17
+LIB_libgit2_sys_REP=${GH}/alexcrichton/git2-rs
 LIB_libgit2_sys_DIR=git2-rs
 LIB_libgit2_sys_SRC=libgit2-sys
 LIB_libgit2_sys_DEP=${DSTDIR}/lib/libgit2.so ${CARGOLIB}/liblibssh2-sys.rlib \
@@ -161,7 +162,10 @@ LIB_cargo_REV=dfd4868
 LIB_cargo_REP=${GH}/mneumann/cargo.git
 LIB_cargo_SRC=src/cargo
 LIB_cargo_DEP=${CARGOLIB}/liblog.rlib ${CARGOLIB}/libterm.rlib \
-	      ${CARGOLIB}/libtime.rlib
+	      ${CARGOLIB}/libtime.rlib \
+	      ${CARGOLIB}/libregistry.rlib
+LIB_cargo_OPT=--extern log=${CARGOLIB}/liblog.rlib \
+	      --extern term=${CARGOLIB}/libterm.rlib
 
 LIB_cargo_ENV=CARGO_PKG_VERSION_MAJOR=0 \
 	      CARGO_PKG_VERSION_MINOR=0 \
@@ -204,7 +208,7 @@ ${CARGOLIB}/lib${LIB_${L}_NAM}.rlib: \
 		${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_REV}  \
 		${LIB_${L}_DEP}
 	@echo "*** Build ${L}"
-	${LIB_${L}_ENV} ${RUSTC} ${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_SRC}/lib.rs --crate-type lib --crate-name ${LIB_${L}_NAM} --out-dir ${CARGOLIB} -L ${CARGOLIB}/
+	${LIB_${L}_ENV} ${RUSTC} ${WRKDIR}/${LIB_${L}_DIR}/${LIB_${L}_SRC}/lib.rs --crate-type lib ${LIB_${L}_OPT} --crate-name ${LIB_${L}_NAM} --out-dir ${CARGOLIB} -L ${CARGOLIB}/
 .endfor
 
 # fetch instructions
