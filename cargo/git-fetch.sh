@@ -9,4 +9,6 @@ echo "*** git pull"
 (cd ${DIR} && git pull)
 echo "*** git checkout ${DIR} ${REV}"
 (cd ${DIR} && git checkout -q ${REV})
-touch ${DIR}/${REV}
+if [ ! -e ${DIR}/${REV} ]; then
+  touch ${DIR}/${REV}
+fi
