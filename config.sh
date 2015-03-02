@@ -6,7 +6,7 @@ USE_GIT=YES
 USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
 
-ALL_PATCHES="main-mk"
+ALL_PATCHES="main-mk liblibc-lib"
 
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
@@ -48,7 +48,7 @@ gen_md5() {
 RUST_CRATES="core libc alloc unicode collections rand std rustc_bitflags arena log fmt_macros serialize"
 RUST_CRATES="${RUST_CRATES} term syntax flate getopts test coretest graphviz rustc_back"
 RUST_CRATES="${RUST_CRATES} rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans"
-RUST_CRATES="${RUST_CRATES} rustc_resolve rustc_privacy rustc_lint rustc_driver rustdoc"
+RUST_CRATES="${RUST_CRATES} rustc_resolve rustc_privacy rustc_driver rustdoc"
 
 LLVM_LIBRARIES="LTO ObjCARCOpts Linker ipo Vectorize BitWriter IRReader AsmParser R600CodeGen R600Desc"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} R600Info R600AsmPrinter SystemZDisassembler SystemZCodeGen SystemZAsmParser"

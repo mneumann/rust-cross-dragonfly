@@ -33,13 +33,13 @@ mkdir -p ${ROOT}
 if [ ! -e ${RUST_SRC} ]; then
   cd ${ROOT}
   extract_source_into rust
-  patch_source libstd-unix-c
+  patch_source liblibc-lib
 fi
 
 if [ "$USE_LOCAL_RUST" != "YES" ]; then
   cd ${ROOT}/rust
+  patch_source liblibc-lib
   ./configure --prefix=${RUST_PREFIX} --disable-docs
-  patch_source llvm
   cd ${RUST_SRC}
   make || exit 1
   make install || exit 1
