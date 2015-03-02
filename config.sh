@@ -1,12 +1,12 @@
 BRANCH=master
-COMMIT=ac134f7ca435551964996ee88319241cd3c7c110
-SHORT_COMMIT=ac134f7
+COMMIT=880fb89bde126aa43fc348d0b93839d3d18a1f51
+SHORT_COMMIT=880fb89
 REPO=https://github.com/rust-lang/rust.git
 USE_GIT=YES
 USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
 
-ALL_PATCHES="llvm main-mk libstd-unix-c"
+ALL_PATCHES="main-mk"
 
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
@@ -45,9 +45,10 @@ gen_md5() {
 }
 
 # List of all crates to compile (order is important)
-RUST_CRATES="core libc alloc unicode collections rand std arena log fmt_macros serialize term syntax flate"
-RUST_CRATES="${RUST_CRATES} getopts test coretest graphviz rustc_back rustc_llvm rbml rustc rustc_borrowck"
-RUST_CRATES="${RUST_CRATES} rustc_typeck rustc_trans rustc_resolve rustc_privacy rustc_driver rustdoc"
+RUST_CRATES="core libc alloc unicode collections rand std rustc_bitflags arena log fmt_macros serialize"
+RUST_CRATES="${RUST_CRATES} term syntax flate getopts test coretest graphviz rustc_back"
+RUST_CRATES="${RUST_CRATES} rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans"
+RUST_CRATES="${RUST_CRATES} rustc_resolve rustc_privacy rustc_lint rustc_driver rustdoc"
 
 LLVM_LIBRARIES="LTO ObjCARCOpts Linker ipo Vectorize BitWriter IRReader AsmParser R600CodeGen R600Desc"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} R600Info R600AsmPrinter SystemZDisassembler SystemZCodeGen SystemZAsmParser"
