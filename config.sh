@@ -1,19 +1,19 @@
-BRANCH=master
-COMMIT=880fb89bde126aa43fc348d0b93839d3d18a1f51
-SHORT_COMMIT=880fb89
-REPO=https://github.com/rust-lang/rust.git
-USE_GIT=YES
+#BRANCH=master
+#COMMIT=880fb89bde126aa43fc348d0b93839d3d18a1f51
+#SHORT_COMMIT=880fb89
+#REPO=https://github.com/rust-lang/rust.git
+USE_GIT=NO
 USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
 
-ALL_PATCHES="main-mk liblibc-lib"
+ALL_PATCHES="main-mk"
 
 if [ "${USE_NIGHTLY}" = "YES" ]; then
 PACKAGE=rustc-nightly-src.tar.gz
 PACKAGE_DIR=rustc-nightly
 else
-PACKAGE=rustc-1.0.0-alpha-src.tar.gz
-PACKAGE_DIR=rustc-1.0.0-alpha
+PACKAGE=rustc-1.0.0-src.tar.gz
+PACKAGE_DIR=rustc-1.0.0
 fi
 
 CC=cc
