@@ -1,22 +1,29 @@
-BRANCH=master
-COMMIT=a59de37e99060162a2674e3ff45409ac73595c0e
-SHORT_COMMIT=a59de37
-REPO=https://github.com/rust-lang/rust.git
-RELEASE_TAG="1.0.0"
-USE_GIT=NO
-USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
+USE_DIST=NIGHTLY
 
-ALL_PATCHES="main-mk"
-
-if [ "${USE_NIGHTLY}" = "YES" ]; then
-PACKAGE=rustc-nightly-src.tar.gz
-PACKAGE_DIR=rustc-nightly
+if [ "${USE_DIST}" = "NIGHTLY" ]; then
+  echo "nightly"
+  PACKAGE=rustc-nightly-src.tar.gz
+  PACKAGE_DIR=rustc-nightly
+  RELEASE_TAG="1.2.0-nightly"
+elif [ "${USE_DIST}" = "STABLE" ]; then
+  echo "stable"
+  PACKAGE=rustc-1.0.0-src.tar.gz
+  PACKAGE_DIR=rustc-1.0.0
+  RELEASE_TAG="1.0.0"
+elif [ "${USE_DIST}" = "GIT" ]; then
+  echo "git"
+  BRANCH=master
+  COMMIT=a59de37e99060162a2674e3ff45409ac73595c0e
+  SHORT_COMMIT=a59de37
+  REPO=https://github.com/rust-lang/rust.git
+  RELEASE_TAG="1.0.0-${SHORT_COMMIT}"
 else
-PACKAGE=rustc-1.0.0-src.tar.gz
-PACKAGE_DIR=rustc-1.0.0
+  echo "invalid distribution"
+  exit 1
 fi
 
+ALL_PATCHES="main-mk"
 CC=cc
 CFLAGS="-m64 -fPIC"
 CXX="g++"
@@ -76,7 +83,7 @@ else
 fi
 
 extract_source_into() {
-  if [ "${USE_GIT}" = "YES" ]; then
+  if [ "${USE_DIST}" = "GIT" ]; then
     opts=""
     if [ "$2" != "" ]; then
       opts="${opts} --reference $2"
