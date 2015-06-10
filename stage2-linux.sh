@@ -65,7 +65,7 @@ export LD_LIBRARY_PATH=${RUST_PREFIX}/lib
 
 mkdir -p ${RS_LIB_DIR}
 
-export CFG_RELEASE="1.0.0-nightly"
+export CFG_RELEASE="${RELEASE_TAG}"
 export CFG_VER_HASH="${COMMIT}"
 export CFG_SHORT_VER_HASH="${SHORT_COMMIT}"
 export CFG_VER_DATE="`date '+%F %T %z'`"

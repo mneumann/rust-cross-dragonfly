@@ -1,7 +1,8 @@
-#BRANCH=master
-#COMMIT=880fb89bde126aa43fc348d0b93839d3d18a1f51
-#SHORT_COMMIT=880fb89
-#REPO=https://github.com/rust-lang/rust.git
+BRANCH=master
+COMMIT=a59de37e99060162a2674e3ff45409ac73595c0e
+SHORT_COMMIT=a59de37
+REPO=https://github.com/rust-lang/rust.git
+RELEASE_TAG="1.0.0"
 USE_GIT=NO
 USE_NIGHTLY=NO
 USE_LOCAL_RUST=NO
@@ -48,7 +49,7 @@ gen_md5() {
 RUST_CRATES="core libc alloc unicode collections rand std rustc_bitflags arena log fmt_macros serialize"
 RUST_CRATES="${RUST_CRATES} term syntax flate getopts test coretest graphviz rustc_back"
 RUST_CRATES="${RUST_CRATES} rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans"
-RUST_CRATES="${RUST_CRATES} rustc_resolve rustc_privacy rustc_driver rustdoc"
+RUST_CRATES="${RUST_CRATES} rustc_resolve rustc_privacy rustc_lint rustc_driver rustdoc"
 
 LLVM_LIBRARIES="LTO ObjCARCOpts Linker ipo Vectorize BitWriter IRReader AsmParser R600CodeGen R600Desc"
 LLVM_LIBRARIES="${LLVM_LIBRARIES} R600Info R600AsmPrinter SystemZDisassembler SystemZCodeGen SystemZAsmParser"
