@@ -23,7 +23,7 @@ else
   exit 1
 fi
 
-ALL_PATCHES="main-mk"
+ALL_PATCHES="main-mk libstd-os-dragonfly"
 CC=cc
 CFLAGS="-m64 -fPIC"
 CXX="g++"
@@ -53,9 +53,10 @@ gen_md5() {
 }
 
 # List of all crates to compile (order is important)
-RUST_CRATES="core libc alloc unicode collections rand std rustc_bitflags arena log fmt_macros serialize"
-RUST_CRATES="${RUST_CRATES} term syntax flate getopts test coretest graphviz rustc_back"
-RUST_CRATES="${RUST_CRATES} rustc_llvm rbml rustc rustc_borrowck rustc_typeck rustc_trans"
+RUST_CRATES="core libc alloc rustc_unicode collections rand std arena log fmt_macros serialize"
+RUST_CRATES="${RUST_CRATES} term syntax flate getopts test coretest graphviz"
+RUST_CRATES="${RUST_CRATES} rustc_bitflags rustc_data_structures rustc_llvm rustc_back"
+RUST_CRATES="${RUST_CRATES} rbml rustc rustc_borrowck rustc_typeck rustc_trans"
 RUST_CRATES="${RUST_CRATES} rustc_resolve rustc_privacy rustc_lint rustc_driver rustdoc"
 
 LLVM_LIBRARIES="LTO ObjCARCOpts Linker ipo Vectorize BitWriter IRReader AsmParser R600CodeGen R600Desc"

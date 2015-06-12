@@ -33,12 +33,12 @@ mkdir -p ${ROOT}
 if [ ! -e ${RUST_SRC} ]; then
   cd ${ROOT}
   extract_source_into rust
-  patch_source liblibc-lib
+  patch_source libstd-os-dragonfly
 fi
 
 if [ "$USE_LOCAL_RUST" != "YES" ]; then
   cd ${ROOT}/rust
-  patch_source liblibc-lib
+  patch_source libstd-os-dragonfly
   ./configure --prefix=${RUST_PREFIX} --disable-docs
   cd ${RUST_SRC}
   make || exit 1
@@ -83,7 +83,7 @@ for lib in $RUST_CRATES; do
     echo "skipping $lib"
   else
     echo "compiling $lib"
-    ${RUSTC} ${RUSTC_FLAGS} --crate-type lib -L${DF_LIB_DIR} -L${DF_LIB_DIR}/llvm -L${RS_LIB_DIR} ${RUST_SRC}/src/lib${lib}/lib.rs -o ${RS_LIB_DIR}/lib${lib}.rlib
+    ${RUSTC} ${RUSTC_FLAGS} --crate-type lib -L${DF_LIB_DIR} -L${DF_LIB_DIR}/llvm -L${RS_LIB_DIR} ${RUST_SRC}/src/lib${lib}/lib.rs -o ${RS_LIB_DIR}/lib${lib}.rlib || exit 1
   fi
 done
 
