@@ -45,7 +45,7 @@ if [ "$USE_LOCAL_RUST" != "YES" ]; then
   make install || exit 1
 fi
 
-if [ "$USE_GIT" != "YES" ]; then
+if [ "$USE_DIST" != "GIT" ]; then
   cd $ROOT
   MD5_DF=`cat ${TOP}/stage1-dragonfly/package.md5`
   MD5=`gen_md5 ${PACKAGE}`
