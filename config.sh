@@ -1,11 +1,12 @@
 USE_LOCAL_RUST=NO
-USE_DIST=NIGHTLY
+USE_DIST=${USE_DIST:-NIGHTLY}
+USE_CACHED_LLVM=${USE_CACHED_LLVM:-NO}
 
 if [ "${USE_DIST}" = "NIGHTLY" ]; then
   echo "nightly"
   PACKAGE=rustc-nightly-src.tar.gz
   PACKAGE_DIR=rustc-nightly
-  RELEASE_TAG="1.2.0-nightly"
+  RELEASE_TAG="1.2.0-dev"
 elif [ "${USE_DIST}" = "STABLE" ]; then
   echo "stable"
   PACKAGE=rustc-1.0.0-src.tar.gz
@@ -14,10 +15,10 @@ elif [ "${USE_DIST}" = "STABLE" ]; then
 elif [ "${USE_DIST}" = "GIT" ]; then
   echo "git"
   BRANCH=master
-  COMMIT=a59de37e99060162a2674e3ff45409ac73595c0e
-  SHORT_COMMIT=a59de37
+  #COMMIT=a59de37e99060162a2674e3ff45409ac73595c0e
+  #SHORT_COMMIT=a59de37
   REPO=https://github.com/rust-lang/rust.git
-  RELEASE_TAG="1.0.0-${SHORT_COMMIT}"
+  RELEASE_TAG="1.2.0-dev"
 else
   echo "invalid distribution"
   exit 1

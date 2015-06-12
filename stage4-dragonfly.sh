@@ -35,12 +35,15 @@ fi
 cd ${RUST_SRC}
 
 #export RUST_BACKTRACE=1
-
 # --enable-rpath ??
-./configure --llvm-root=${LLVM_ROOT} --enable-local-rust --local-rust-root=${LOCAL_RUST_ROOT} --prefix=$PREFIX --disable-docs
+
+if [ " ${USE_CACHED_LLVM}" = "YES" ]; then
+add="--llvm-root=${LLVM_ROOT}"
+fi
+
+./configure ${add} --enable-local-rust --local-rust-root=${LOCAL_RUST_ROOT} --prefix=$PREFIX --disable-docs
 
 gmake
-
 gmake snap-stage3
 
 #p=`pwd`
